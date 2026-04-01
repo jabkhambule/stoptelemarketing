@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop Unwanted Telemarketing Calls - Official SA Opt-Out Service</title>
+    <meta name="description" content="We handle the official NCC telemarketing opt-out process for you. No forms, no confusion. R199 once-off.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #0d5c54;
+            --primary-light: #14b8a6;
+            --accent: #f59e0b;
+            --text-dark: #1e293b;
+            --text-medium: #475569;
+            --text-light: #64748b;
+            --bg-cream: #fefcf8;
+            --bg-white: #ffffff;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-cream);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-narrow {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .header-cta {
+            background: var(--primary);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .header-cta:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-cream) 0%, #fff 100%);
+            padding: 80px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(40px, 5vw, 58px);
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subheadline {
+            font-size: clamp(20px, 2.5vw, 24px);
+            color: var(--text-medium);
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .trust-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-top: 32px;
+            align-items: center;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-medium);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .trust-badge-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(20, 184, 166, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(32px, 4vw, 42px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-intro {
+            font-size: 18px;
+            color: var(--text-medium);
+            margin-bottom: 48px;
+            max-width: 720px;
+        }
+
+        /* Explanation Section */
+        .explanation {
+            background: var(--bg-white);
+        }
+
+        .explanation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .problem-box,
+        .solution-box {
+            padding: 32px;
+            border-radius: 16px;
+        }
+
+        .problem-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #fbbf24;
+        }
+
+        .solution-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid #10b981;
+        }
+
+        .box-label {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        .problem-box .box-label {
+            background: #fbbf24;
+            color: #78350f;
+        }
+
+        .solution-box .box-label {
+            background: #10b981;
+            color: #064e3b;
+        }
+
+        .box-title {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .box-list {
+            list-style: none;
+        }
+
+        .box-list li {
+            padding-left: 28px;
+            position: relative;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .problem-box .box-list li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: #dc2626;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .solution-box .box-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            background: var(--bg-cream);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            background: var(--bg-white);
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .step-number-large {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Fraunces', serif;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title-large {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .step-description {
+            color: var(--text-medium);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* Mobile Summary Section */
+        .mobile-summary {
+            background: var(--bg-cream);
+            padding: 40px 0;
+        }
+
+        .mobile-summary-box {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .mobile-summary-title {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .mobile-summary-text {
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: var(--bg-white);
+        }
+
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .faq-item {
+            background: var(--bg-cream);
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .faq-question {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .faq-answer {
+            color: var(--text-medium);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .faq-answer p {
+            margin: 0;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            background: var(--bg-cream);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .benefit-card {
+            background: var(--bg-white);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-light);
+        }
+
+        .benefit-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .benefit-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .benefit-description {
+            color: var(--text-medium);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .cta-price {
+            font-family: 'Fraunces', serif;
+            font-size: 56px;
+            font-weight: 700;
+            margin: 32px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .price-currency {
+            font-size: 32px;
+            opacity: 0.9;
+        }
+
+        .price-note {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            background: var(--accent);
+            color: var(--text-dark);
+            padding: 18px 48px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            display: inline-block;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: #fbbf24;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+        }
+
+        .cta-guarantee {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 32px;
+            font-size: 15px;
+            opacity: 0.95;
+        }
+
+        .guarantee-icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* Order Form Section */
+        .order-section {
+            background: var(--bg-white);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 48px auto 0;
+            background: var(--bg-cream);
+            padding: 48px;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+        }
+
+        .form-step {
+            margin-bottom: 32px;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+        }
+
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.2s;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'DM Sans', sans-serif;
+            min-height: 80px;
+            resize: vertical;
+            transition: all 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+        }
+
+        .input-hint {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+
+        .verify-section {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .verify-section input {
+            flex: 1;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .file-upload {
+            border: 3px dashed var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-light);
+            background: rgba(20, 184, 166, 0.02);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .file-selected {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--success);
+            color: white;
+            border-radius: 10px;
+            margin-top: 16px;
+            font-weight: 600;
+        }
+
+        .proceed-button {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent);
+            color: var(--text-dark);
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 32px;
+        }
+
+        .proceed-button:hover {
+            background: #fbbf24;
+        }
+
+        .legal-note {
+            background: #f1f5f9;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 32px;
+            font-size: 14px;
+            color: var(--text-medium);
+            line-height: 1.6;
+            border-left: 4px solid var(--primary);
+        }
+
+        .legal-note strong {
+            color: var(--text-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: #94a3b8;
+            padding: 48px 0 32px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 16px;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        .alert-icon {
+            font-size: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .explanation-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-badges {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-container {
+                padding: 32px 24px;
+            }
+
+            .cta-price {
+                font-size: 42px;
+            }
+
+            .verify-section {
+                flex-direction: column;
+            }
+
+            .verify-section button {
+                width: 100%;
+            }
+
+            section {
+                padding: 60px 0;
+            }
+
+            .hero {
+                padding: 60px 0 40px;
+            }
+
+            .mobile-summary {
+                padding: 32px 0;
+            }
+
+            .mobile-summary-box {
+                padding: 20px;
+            }
+
+            .step-item {
+                gap: 16px;
+            }
+
+            .step-number-large {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+
+            .step-title-large {
+                font-size: 16px;
+            }
+
+            .step-description {
+                font-size: 14px;
+            }
+
+            .faq-item {
+                padding: 20px;
+            }
+
+            .faq-question {
+                font-size: 16px;
+            }
+
+            .faq-answer {
+                font-size: 14px;
+            }
+
+            /* Mobile-First: Form appears immediately after hero */
+            .content-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .order-section {
+                order: 1; /* Form appears first on mobile */
+            }
+
+            .mobile-summary {
+                order: 2;
+            }
+
+            .explanation {
+                order: 3;
+            }
+
+            .how-it-works {
+                order: 4;
+            }
+
+            .benefits {
+                order: 5;
+            }
+
+            .faq-section {
+                order: 6;
+            }
+
+            .cta-section {
+                order: 7;
+            }
+        }
+
+        /* Desktop: Reset to natural order */
+        @media (min-width: 769px) {
+            .content-wrapper {
+                display: block; /* No flexbox reordering on desktop */
+            }
+        }
+    </style>
+
+    <!-- Microsoft Clarity Analytics -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "v0xb3qhrfv");
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <span class="logo-icon">🛡️</span>
+                    StopTelemarketing
+                </a>
+                <a href="#order" class="header-cta">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container-narrow">
+            <div class="hero-content">
+                <h1>Stop Unwanted Telemarketing Calls</h1>
+                <p class="hero-subheadline">We handle the official opt-out process for you — no forms, no confusion.</p>
+                
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <span class="trust-badge-icon">✓</span>
+                        <span>Official NCC Process</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="trust-badge-icon">🔒</span>
+                        <span>Secure & Confidential</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="trust-badge-icon">⚡</span>
+                        <span>Quick & Easy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Wrapper for Mobile Reordering -->
+    <div class="content-wrapper">
+
+    <!-- Mobile Summary Section -->
+    <section class="mobile-summary">
+        <div class="container-narrow">
+            <div class="mobile-summary-box">
+                <h3 class="mobile-summary-title">Quick Overview</h3>
+                <p class="mobile-summary-text">Constant telemarketing calls are frustrating. We help by completing the official opt-out process on your behalf — saving you time and avoiding confusing paperwork. For a once-off fee of R199, your request is handled carefully, securely, and in line with South African regulations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explanation Section -->
+    <section class="explanation">
+        <div class="container-narrow">
+            <span class="section-label">The Problem & Solution</span>
+            <h2>Opting out is possible, but complicated</h2>
+            <p class="section-intro">Opting out of telemarketing in South Africa is possible, but the process can be confusing and time-consuming. We remove that frustration by handling it correctly on your behalf.</p>
+
+            <div class="explanation-grid">
+                <div class="problem-box">
+                    <span class="box-label">The DIY Approach</span>
+                    <h3 class="box-title">Doing it yourself means:</h3>
+                    <ul class="box-list">
+                        <li>Navigating complex government forms</li>
+                        <li>Finding and scanning required documents</li>
+                        <li>Understanding unclear instructions</li>
+                        <li>Risking mistakes that delay results</li>
+                        <li>Spending hours on paperwork</li>
+                    </ul>
+                </div>
+
+                <div class="solution-box">
+                    <span class="box-label">Our Service</span>
+                    <h3 class="box-title">We handle everything:</h3>
+                    <ul class="box-list">
+                        <li>Complete the official process accurately</li>
+                        <li>Submit all required documentation</li>
+                        <li>Handle it confidentially and compliantly</li>
+                        <li>Avoid delays from common mistakes</li>
+                        <li>Save you hours of frustration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container-narrow">
+            <span class="section-label">Process Overview</span>
+            <h2>How It Works</h2>
+            <p class="section-intro">A straightforward four-step process from start to finish.</p>
+
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-number-large">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title-large">Complete the secure form</h3>
+                        <p class="step-description">Provide your contact details and upload a copy of your ID document.</p>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number-large">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title-large">We submit your official opt-out request on your behalf</h3>
+                        <p class="step-description">We complete and submit the National Consumer Commission opt-out forms using your information.</p>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number-large">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title-large">Your information is used only for this service and handled confidentially</h3>
+                        <p class="step-description">We do not share, sell, or use your personal information for any other purpose.</p>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number-large">4</div>
+                    <div class="step-content">
+                        <h3 class="step-title-large">Telemarketers are required to honour opt-outs within the regulated timeframe</h3>
+                        <p class="step-description">Once registered, telemarketers must comply with your opt-out according to NCC regulations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container-narrow">
+            <span class="section-label">Why Choose Us</span>
+            <h2>A done-for-you solution that works</h2>
+            <p class="section-intro">We take care of everything so you can focus on what matters. No confusion, no delays, no hassle.</p>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">📋</div>
+                    <h3 class="benefit-title">Accurate Processing</h3>
+                    <p class="benefit-description">We complete the official opt-out process accurately for you, following all NCC requirements to the letter.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">✨</div>
+                    <h3 class="benefit-title">No Forms or Confusion</h3>
+                    <p class="benefit-description">Skip the government forms and unclear instructions. We handle all the paperwork for you.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">⏱️</div>
+                    <h3 class="benefit-title">Saves Time</h3>
+                    <p class="benefit-description">Our process is designed to minimize common mistakes and handle submissions efficiently.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔐</div>
+                    <h3 class="benefit-title">Confidential Handling</h3>
+                    <p class="benefit-description">Your request is handled confidentially and compliantly. Your information stays secure.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3 class="benefit-title">Done-For-You</h3>
+                    <p class="benefit-description">Ideal if you prefer a done-for-you solution rather than navigating the process yourself.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">✅</div>
+                    <h3 class="benefit-title">Professional Handling</h3>
+                    <p class="benefit-description">Your opt-out is managed by professionals who understand the NCC requirements and process.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container-narrow">
+            <span class="section-label">Common Questions</span>
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h3 class="faq-question">Is this an official government service?</h3>
+                    <div class="faq-answer">
+                        <p>No, we are not a government service. We are a private company that assists individuals with completing the official National Consumer Commission (NCC) opt-out process. The opt-out itself is registered with the government, but we are an independent service provider that handles the paperwork on your behalf.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Why do I need to pay for this?</h3>
+                    <div class="faq-answer">
+                        <p>You don't have to pay — you can complete the opt-out process yourself for free through the NCC's official channels. Our R199 fee is for the convenience of having someone else handle the paperwork, document submission, and form completion for you. We're a time-saving service for those who prefer not to navigate the process themselves.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">How long before calls stop?</h3>
+                    <div class="faq-answer">
+                        <p>There is no instant cutoff. Once your opt-out is registered with the NCC, telemarketers are legally required to update their systems and stop calling you. This process can take several weeks, and the exact timeframe depends on how often each company updates their contact lists. Different companies work at different speeds.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Why might I still receive some calls?</h3>
+                    <div class="faq-answer">
+                        <p>Even after opting out, you may still receive calls from: companies with whom you have an existing relationship, political organizations (exempt from opt-out regulations), market research surveys (also exempt), or companies operating illegally. The opt-out covers direct marketing calls, but not all types of calls are regulated under the same laws.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">How is my personal information protected?</h3>
+                    <div class="faq-answer">
+                        <p>We use your information only to complete the NCC opt-out registration on your behalf. We do not sell, share, or use your information for marketing purposes. All documents are handled securely, and we comply with South Africa's Protection of Personal Information Act (POPIA). Your information is stored only as long as necessary to complete the service.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container-narrow">
+            <div class="cta-content">
+                <h2>Simple, transparent pricing</h2>
+                <p style="font-size: 20px; opacity: 0.95; margin-bottom: 24px;">For a once-off fee of R199, your opt-out request is submitted correctly and carefully.</p>
+                
+                <div class="cta-price">
+                    <span class="price-currency">R</span>199
+                </div>
+                
+                <p class="price-note">One-time payment • No recurring fees • No hidden costs</p>
+                
+                <a href="#order" class="cta-button">Get Started Now</a>
+                
+                <p style="font-size: 14px; opacity: 0.9; margin-top: 24px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    This is a private assistance service. You are not required to use it to opt out.
+                </p>
+                
+                <div class="cta-guarantee">
+                    <span class="guarantee-icon">🛡️</span>
+                    <span>Secure payment via PayFast</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Form Section -->
+    <section id="order" class="order-section">
+        <div class="container-narrow">
+            <span class="section-label">Step-by-Step Process</span>
+            <h2>Complete your registration</h2>
+            <p class="section-intro">Simple 3-step process. Takes less than 5 minutes to complete.</p>
+
+            <!-- Form Microcopy -->
+            <p style="text-align: center; color: #6b7280; font-size: 15px; margin: 24px 0 32px; font-weight: 500;">
+                Takes about 2 minutes. No subscription.
+            </p>
+
+            <div class="form-container">
+                <!-- Trust Notice -->
+                <div style="background: #f0fdfa; padding: 16px 20px; border-radius: 10px; margin-bottom: 32px; border-left: 4px solid var(--primary); font-size: 14px; color: var(--text-dark); line-height: 1.6;">
+                    <strong>Your privacy matters:</strong> Your information is used only to submit your opt-out request and is handled confidentially.
+                </div>
+
+                <!-- Alert Messages -->
+                <div id="alertContainer"></div>
+
+                <!-- Step 1: Personal Details -->
+                <div class="form-step" id="step1">
+                    <div class="step-header">
+                        <span class="step-number">1</span>
+                        <h3 class="step-title">Your Personal Details</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="firstName">First Name <span style="color: #ef4444;">*</span></label>
+                        <input type="text" id="firstName" required placeholder="John">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="surname">Surname <span style="color: #ef4444;">*</span></label>
+                        <input type="text" id="surname" required placeholder="Smith">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idType">ID Type <span style="color: #ef4444;">*</span></label>
+                        <select id="idType" required>
+                            <option value="">Select ID Type</option>
+                            <option value="RSA ID">South African ID</option>
+                            <option value="Passport">Passport</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idNumber">ID Number / Passport Number <span style="color: #ef4444;">*</span></label>
+                        <input type="text" id="idNumber" required placeholder="8001015009087">
+                        <p class="input-hint">Enter your 13-digit SA ID number or passport number</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender <span style="color: #ef4444;">*</span></label>
+                        <select id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maritalStatus">Marital Status <span style="color: #ef4444;">*</span></label>
+                        <select id="maritalStatus" required>
+                            <option value="">Select Status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Widowed">Widowed</option>
+                        </select>
+                    </div>
+
+                    <button onclick="validateStep1()" id="step1Btn" type="button">
+                        <span id="step1Text">Continue to Contact Details</span>
+                    </button>
+                </div>
+
+                <!-- Step 2: Contact Details -->
+                <div class="form-step hidden" id="step2">
+                    <div class="step-header">
+                        <span class="step-number">2</span>
+                        <h3 class="step-title">Your Contact Details</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span style="color: #ef4444;">*</span></label>
+                        <input type="email" id="email" required placeholder="john@example.com">
+                        <p class="input-hint">We'll send a verification code to this email</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Mobile Phone <span style="color: #ef4444;">*</span></label>
+                        <input type="tel" id="phone" required placeholder="0821234567">
+                        <p class="input-hint">This number will be registered for opt-out</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="workPhone">Work Phone</label>
+                        <input type="tel" id="workPhone" placeholder="0115551234 (optional)">
+                        <p class="input-hint">Optional - if you want to opt-out a work number too</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Physical Address <span style="color: #ef4444;">*</span></label>
+                        <textarea id="address" required placeholder="123 Main Street, Johannesburg, 2000"></textarea>
+                        <p class="input-hint">Your full physical address as required by NCC</p>
+                    </div>
+
+                    <button onclick="sendVerificationCode()" id="sendCodeBtn" type="button">
+                        <span id="sendCodeText">Send Verification Code</span>
+                        <span id="sendCodeSpinner" class="spinner hidden"></span>
+                    </button>
+                </div>
+
+                <!-- Step 3: Email Verification -->
+                <div class="form-step hidden" id="step3">
+                    <div class="step-header">
+                        <span class="step-number">3</span>
+                        <h3 class="step-title">Verify Your Email</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="verificationCode">Verification Code <span style="color: #ef4444;">*</span></label>
+                        <div class="verify-section">
+                            <input type="text" id="verificationCode" placeholder="Enter 6-digit code" maxlength="6">
+                            <button onclick="verifyCode()" id="verifyBtn" type="button">
+                                <span id="verifyText">Verify</span>
+                                <span id="verifySpinner" class="spinner hidden"></span>
+                            </button>
+                        </div>
+                        <p class="input-hint">Check your email for the verification code</p>
+                    </div>
+                </div>
+
+                <!-- Step 4: Upload ID -->
+                <div class="form-step hidden" id="step4">
+                    <div class="step-header">
+                        <span class="step-number">4</span>
+                        <h3 class="step-title">Upload ID Document</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ID Document or Passport <span style="color: #ef4444;">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('idDocument').click()">
+                            <input type="file" id="idDocument" accept="image/*,.pdf" onchange="handleFileSelect(this)">
+                            <div class="upload-icon">📄</div>
+                            <div class="upload-text">Click to upload your ID</div>
+                            <div class="upload-hint">Accepted: JPG, PNG, or PDF (max 5MB)</div>
+                        </div>
+                        <div id="fileSelected" class="file-selected hidden">
+                            <span>✓</span>
+                            <span id="fileName"></span>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-medium); margin-top: 12px; line-height: 1.5;">
+                            Documents are securely handled and not shared with third parties.
+                        </p>
+                    </div>
+
+                    <button onclick="proceedToPayment()" id="proceedBtn" class="proceed-button" disabled type="button">
+                        <span id="proceedText">Proceed to Secure Payment</span>
+                        <span id="proceedSpinner" class="spinner hidden"></span>
+                    </button>
+
+                    <p style="text-align: center; font-size: 14px; color: var(--text-medium); margin-top: 16px;">
+                        Once-off service fee: R199 (no subscriptions)
+                    </p>
+                </div>
+
+                <!-- Legal Note -->
+                <div class="legal-note">
+                    <strong>Important:</strong> We are not affiliated with the National Consumer Commission (NCC) but use their official opt-out system on your behalf. Your information is handled in strict compliance with South African data protection laws.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </div><!-- End Content Wrapper -->
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">StopTelemarketing</div>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#faq">FAQ</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="/cdn-cgi/l/email-protection#661512091612030a030b070d03120f080126010b070f0a4805090b">Contact</a>
+            </div>
+            <p style="margin-top: 24px; font-size: 14px;">
+                © 2025 StopTelemarketing.co.za • Helping South Africans stop unwanted calls
+            </p>
+        </div>
+    </footer>
+
+    <!-- Hidden PayFast Form -->
+    <!-- PayFast Form - SANDBOX MODE (For Testing) -->
+    <!-- LIVE PAYFAST CONFIGURATION -->
+    <form id="payfastForm" action="https://www.payfast.co.za/eng/process" method="POST" style="display: none;">
+        <!-- LIVE CREDENTIALS -->
+        <input type="hidden" name="merchant_id" id="merchant_id" value="31907641">
+        <input type="hidden" name="merchant_key" id="merchant_key" value="omutyofcmqnez">
+
+        
+        <!-- URLs -->
+        <input type="hidden" name="return_url" id="return_url" value="https://stoptelemarketing.co.za/success.html">
+        <input type="hidden" name="cancel_url" id="cancel_url" value="https://stoptelemarketing.co.za">
+        <input type="hidden" name="notify_url" id="notify_url" value="https://stoptelemarketing.co.za/.netlify/functions/payfast-notify">
+        
+        <!-- Dynamic fields (filled by JavaScript) -->
+        <input type="hidden" name="name_first" id="name_first">
+        <input type="hidden" name="email_address" id="email_address">
+        <input type="hidden" name="cell_number" id="cell_number">
+        
+        <!-- Payment details -->
+        <input type="hidden" name="amount" id="amount" value="199.00">
+        <input type="hidden" name="item_name" id="item_name" value="Telemarketing Opt-Out Service">
+        <input type="hidden" name="item_description" id="item_description" value="NCC Telemarketing Opt-Out Registration">
+        
+        <!-- Custom tracking fields -->
+        <input type="hidden" name="custom_str1" id="custom_str1">
+        <input type="hidden" name="custom_str2" id="custom_str2">
+        <input type="hidden" name="custom_str3" id="custom_str3">
+    </form>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        console.log('🚀 SCRIPT SECTION LOADED - Line 1411');
+        console.log('Current URL:', window.location.href);
+        console.log('Document ready state:', document.readyState);
+        
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwORfij2K3QtbX5Ns7O2jYwkbrEQfm1RxlVDldTXzfdkRwfgiQvmUwLpirM_EUq_WQn6A/exec';
+        let uploadedFileBase64 = null;
+        let uploadedFileName = null;
+
+        console.log('✅ Variables declared');
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <span class="alert-icon">${type === 'success' ? '✓' : '⚠'}</span>
+                <span>${message}</span>
+            `;
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        console.log('✅ showAlert function defined');
+
+        function validateStep1() {
+            console.log('🔵 validateStep1 CALLED - This should appear when you click the button!');
+            
+            const firstName = document.getElementById('firstName').value.trim();
+            const surname = document.getElementById('surname').value.trim();
+            const idType = document.getElementById('idType').value;
+            const idNumber = document.getElementById('idNumber').value.trim();
+            const gender = document.getElementById('gender').value;
+            const maritalStatus = document.getElementById('maritalStatus').value;
+
+            console.log('Form values:', { firstName, surname, idType, idNumber, gender, maritalStatus });
+
+            if (!firstName || !surname || !idType || !idNumber || !gender || !maritalStatus) {
+                showAlert('Please fill in all required fields', 'error');
+                console.log('Validation failed: missing fields');
+                return;
+            }
+
+            // Validate ID number format
+            if (idType === 'RSA ID' && idNumber.length !== 13) {
+                showAlert('South African ID number must be 13 digits', 'error');
+                console.log('Validation failed: ID length');
+                return;
+            }
+
+            if (idType === 'RSA ID' && !/^\d{13}$/.test(idNumber)) {
+                showAlert('South African ID number must contain only numbers', 'error');
+                console.log('Validation failed: ID format');
+                return;
+            }
+
+            console.log('Validation passed, moving to step 2');
+            
+            // Move to next step
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            
+            console.log('Step transition complete');
+        }
+
+        async function sendVerificationCode() {
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+
+            if (!email || !phone || !address) {
+                showAlert('Please fill in all required contact fields', 'error');
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('Please enter a valid email address', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('sendCodeBtn');
+            const text = document.getElementById('sendCodeText');
+            const spinner = document.getElementById('sendCodeSpinner');
+            
+            btn.disabled = true;
+            text.classList.add('hidden');
+            spinner.classList.remove('hidden');
+
+            try {
+                console.log('Sending request to:', GOOGLE_SCRIPT_URL);
+                const url = `${GOOGLE_SCRIPT_URL}?action=sendCode&email=${encodeURIComponent(email)}`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.result === 'success') {
+                    showAlert('Verification code sent! Check your email.', 'success');
+                    document.getElementById('step2').classList.add('hidden');
+                    document.getElementById('step3').classList.remove('hidden');
+                } else {
+                    showAlert(data.error || 'Failed to send verification code', 'error');
+                }
+            } catch (error) {
+                console.error('Detailed error:', error);
+                showAlert(`Connection error: ${error.message}. Please try again.`, 'error');
+            } finally {
+                btn.disabled = false;
+                text.classList.remove('hidden');
+                spinner.classList.add('hidden');
+            }
+        }
+
+        async function verifyCode() {
+            const email = document.getElementById('email').value.trim();
+            const code = document.getElementById('verificationCode').value.trim();
+
+            if (!code || code.length !== 6) {
+                showAlert('Please enter the 6-digit verification code', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('verifyBtn');
+            const text = document.getElementById('verifyText');
+            const spinner = document.getElementById('verifySpinner');
+            
+            btn.disabled = true;
+            text.classList.add('hidden');
+            spinner.classList.remove('hidden');
+
+            try {
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=verifyCode&email=${encodeURIComponent(email)}&code=${code}`);
+                const data = await response.json();
+
+                if (data.result === 'success') {
+                    showAlert('Email verified successfully!', 'success');
+                    document.getElementById('step3').classList.add('hidden');
+                    document.getElementById('step4').classList.remove('hidden');
+                } else {
+                    showAlert(data.error || 'Invalid verification code', 'error');
+                }
+            } catch (error) {
+                showAlert('Network error. Please try again.', 'error');
+            } finally {
+                btn.disabled = false;
+                text.classList.remove('hidden');
+                spinner.classList.add('hidden');
+            }
+        }
+
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                showAlert('File size must be less than 5MB', 'error');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedFileBase64 = e.target.result.split(',')[1];
+                uploadedFileName = file.name;
+                
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSelected').classList.remove('hidden');
+                document.getElementById('proceedBtn').disabled = false;
+                
+                showAlert('ID document uploaded successfully', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function proceedToPayment() {
+            if (!uploadedFileBase64) {
+                showAlert('Please upload your ID document', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('proceedBtn');
+            const text = document.getElementById('proceedText');
+            const spinner = document.getElementById('proceedSpinner');
+
+            try {
+                // Collect all form data
+                const firstName = document.getElementById('firstName').value.trim();
+                const surname = document.getElementById('surname').value.trim();
+                const idType = document.getElementById('idType').value;
+                const idNumber = document.getElementById('idNumber').value.trim();
+                const gender = document.getElementById('gender').value;
+                const maritalStatus = document.getElementById('maritalStatus').value;
+                const email = document.getElementById('email').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const workPhone = document.getElementById('workPhone').value.trim();
+                const address = document.getElementById('address').value.trim();
+
+                // Generate order reference
+                const orderRef = 'OPT' + Date.now();
+                
+                // Prepare data for Google Apps Script (matching expected format)
+                const uploadData = {
+                    orderRef: orderRef,
+                    timestamp: new Date().toISOString(),
+                    firstName: firstName,
+                    surname: surname,
+                    idType: idType,
+                    idNumber: idNumber,
+                    gender: gender,
+                    maritalStatus: maritalStatus,
+                    email: email,
+                    phone: phone,
+                    workPhone: workPhone || '',
+                    address: address,
+                    idDocumentBase64: uploadedFileBase64,
+                    idDocumentType: uploadedFileName.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg'
+                };
+
+                console.log('Uploading data:', { ...uploadData, idDocumentBase64: '[BASE64_DATA]' }); // Log without base64
+
+                // Use iframe form submission to bypass CORS issues
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.name = 'uploadFrame_' + Date.now();
+                document.body.appendChild(iframe);
+
+                // Create a form to submit to the iframe
+                const form = document.createElement('form');
+                form.target = iframe.name;
+                form.method = 'POST';
+                form.action = GOOGLE_SCRIPT_URL;
+
+                // Add all fields as hidden inputs
+                Object.keys(uploadData).forEach(key => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = uploadData[key];
+                    form.appendChild(input);
+                });
+
+                document.body.appendChild(form);
+
+                // Listen for iframe load (upload complete)
+                let uploadComplete = false;
+                iframe.onload = function() {
+                    if (!uploadComplete) {
+                        uploadComplete = true;
+                        console.log('Upload complete via iframe');
+                        
+                        // Clean up after a delay
+                        setTimeout(() => {
+                            try {
+                                document.body.removeChild(form);
+                                document.body.removeChild(iframe);
+                            } catch (e) {}
+                        }, 100);
+
+                        // Prepare PayFast form
+                        document.getElementById('name_first').value = firstName;
+                        document.getElementById('email_address').value = email;
+                        document.getElementById('cell_number').value = phone.replace(/\D/g, '');
+                        document.getElementById('custom_str1').value = orderRef;
+                        document.getElementById('custom_str2').value = email;
+                        document.getElementById('custom_str3').value = phone;
+
+                        // Submit to PayFast
+                        showAlert('Redirecting to secure payment...', 'success');
+                        setTimeout(() => {
+                            document.getElementById('payfastForm').submit();
+                        }, 1500);
+                    }
+                };
+
+                // Handle timeout
+                setTimeout(() => {
+                    if (!uploadComplete) {
+                        uploadComplete = true;
+                        console.log('Upload timeout - proceeding anyway');
+                        try {
+                            document.body.removeChild(form);
+                            document.body.removeChild(iframe);
+                        } catch (e) {}
+                        
+                        // Still proceed to payment
+                        document.getElementById('name_first').value = firstName;
+                        document.getElementById('email_address').value = email;
+                        document.getElementById('cell_number').value = phone.replace(/\D/g, '');
+                        document.getElementById('custom_str1').value = orderRef;
+                        document.getElementById('custom_str2').value = email;
+                        document.getElementById('custom_str3').value = phone;
+
+                        showAlert('Redirecting to secure payment...', 'success');
+                        setTimeout(() => {
+                            document.getElementById('payfastForm').submit();
+                        }, 1000);
+                    }
+                }, 5000);
+
+                // Submit the form
+                console.log('Submitting form via iframe...');
+                form.submit();
+
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error processing request: ' + error.message, 'error');
+                btn.disabled = false;
+                text.classList.remove('hidden');
+                spinner.classList.add('hidden');
+            }
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        console.log('✅ Smooth scroll setup complete');
+        console.log('✅ All functions defined');
+        
+        // Test if validateStep1 exists
+        console.log('validateStep1 function exists?', typeof validateStep1);
+        
+        // Wait for DOM to be ready, then test button
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', testButton);
+        } else {
+            testButton();
+        }
+        
+        function testButton() {
+            console.log('🧪 TESTING BUTTON...');
+            const btn = document.getElementById('step1Btn');
+            console.log('Button element:', btn);
+            if (btn) {
+                console.log('Button onclick attribute:', btn.getAttribute('onclick'));
+                console.log('Button onclick property:', btn.onclick);
+                console.log('✅ Button exists and has onclick handler');
+            } else {
+                console.error('❌ Button not found! ID: step1Btn');
+            }
+        }
+    </script>
+</body>
+</html>

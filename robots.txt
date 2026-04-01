@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://stoptelemarketing.co.za/sitemap.xml
+
+# Block sensitive areas (if any in future)
+Disallow: /.netlify/
+Disallow: /admin/

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - StopTelemarketing.co.za</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            padding: 50px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .success-icon svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        h1 { 
+            color: #0f766e; 
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #059669;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        
+        p { 
+            line-height: 1.8; 
+            color: #4b5563;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .info-box {
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 12px;
+            border-left: 5px solid #059669;
+            text-align: left;
+        }
+        
+        .info-box strong {
+            display: block;
+            color: #047857;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .info-box ol {
+            padding-left: 20px;
+            color: #065f46;
+        }
+        
+        .info-box li {
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #0f766e 0%, #0d5c54 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(15, 118, 110, 0.3);
+        }
+        
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(15, 118, 110, 0.4);
+        }
+        
+        .email-note {
+            margin-top: 25px;
+            padding: 15px;
+            background: #fef3c7;
+            border-radius: 8px;
+            color: #92400e;
+            font-size: 14px;
+            border: 1px solid #fbbf24;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 25px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <svg viewBox="0 0 52 52">
+                <path d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+        
+        <h1>Payment Successful!</h1>
+        <p class="subtitle">Your Order Has Been Confirmed</p>
+        
+        <p>Thank you for choosing StopTelemarketing.co.za! We've received your payment of <strong>R199.00</strong> and will process your telemarketing opt-out request immediately.</p>
+        
+        <div class="info-box">
+            <strong>📋 What Happens Next:</strong>
+            <ol>
+                <li><strong>Within 1 hour:</strong> We'll submit your opt-out to the National Consumer Commission (NCC)</li>
+                <li><strong>Within 24-48 hours:</strong> You'll receive NCC confirmation via email</li>
+                <li><strong>Within 30 days:</strong> All telemarketers must stop calling you (legal requirement)</li>
+                <li><strong>Ongoing:</strong> Your registration remains active - no renewal needed</li>
+            </ol>
+        </div>
+        
+        <div class="email-note">
+            📧 <strong>Check Your Email</strong><br>
+            A detailed confirmation has been sent to your email address with your order reference and submission details.
+        </div>
+        
+        <p style="margin-top: 25px; font-size: 14px; color: #6b7280;">
+            <strong>Your Rights:</strong> This opt-out is your legal right under Section 11 of the Consumer Protection Act. Telemarketers who continue calling after 30 days can be reported to the NCC.
+        </p>
+        
+        <a href="https://stoptelemarketing.co.za" class="btn">Return to Homepage</a>
+        
+        <p style="margin-top: 30px; font-size: 13px; color: #9ca3af;">
+            Questions? Email us at <a href="mailto:stoptelemarketing@gmail.com" style="color: #0f766e;">stoptelemarketing@gmail.com</a>
+        </p>
+    </div>
+</body>
+</html>

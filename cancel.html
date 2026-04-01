@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Cancelled - StopTelemarketing.co.za</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .cancel-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            animation: shake 0.5s ease-out;
+        }
+
+        .cancel-icon::before {
+            content: "⚠";
+            color: white;
+            font-size: 3rem;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        h1 {
+            color: #1e293b;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .info-box h3 {
+            color: #92400e;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .info-box p {
+            color: #78350f;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .reassurance-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: left;
+            border-left: 5px solid #10b981;
+        }
+
+        .reassurance-box h3 {
+            color: #065f46;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .reassurance-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reassurance-box li {
+            padding: 0.5rem 0;
+            color: #047857;
+            font-size: 1.05rem;
+            position: relative;
+            padding-left: 1.8rem;
+        }
+
+        .reassurance-box li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .primary-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        .secondary-button {
+            display: inline-block;
+            background: white;
+            color: #2563eb;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid #2563eb;
+        }
+
+        .secondary-button:hover {
+            background: #eff6ff;
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .contact-info strong {
+            color: #1e293b;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .primary-button,
+            .secondary-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cancel-icon"></div>
+        
+        <h1>Payment Cancelled</h1>
+        <p class="subtitle">Your payment was not completed</p>
+
+        <div class="reassurance-box">
+            <h3>Don't worry:</h3>
+            <ul>
+                <li>No charges were made to your account</li>
+                <li>Your personal information is safe</li>
+                <li>You can try again whenever you're ready</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h3>Why did this happen?</h3>
+            <p>
+                Payments can be cancelled for various reasons:<br>
+                • You clicked the cancel/back button<br>
+                • Payment was declined by your bank<br>
+                • Session timeout<br>
+                • Technical issue during payment
+            </p>
+        </div>
+
+        <div class="button-group">
+            <a href="/#order" class="primary-button">Try Payment Again</a>
+            <a href="/" class="secondary-button">Return to Homepage</a>
+        </div>
+
+        <div class="contact-info">
+            <strong>Need help?</strong> We're here to assist!<br>
+            📧 stoptelemarketing@gmail.com<br>
+            <br>
+            <em>We respond within 1-2 hours during business days</em>
+        </div>
+    </div>
+</body>
+</html>
