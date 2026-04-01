@@ -1,0 +1,8 @@
+{
+  "name": "stoptelemarketing",
+  "version": "1.0.0",
+  "description": "StopTelemarketing.co.za Netlify functions",
+  "dependencies": {
+    "playwright-chromium": "^1.40.0"
+  }
+}
