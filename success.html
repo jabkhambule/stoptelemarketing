@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Successful - StopTelemarketing.co.za</title>
+    <!-- Google Analytics GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HTC13XNNL3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HTC13XNNL3');
+      // Fire purchase conversion event
+      gtag('event', 'purchase', {
+        transaction_id: new URLSearchParams(window.location.search).get('order_ref') || '',
+        value: 200,
+        currency: 'ZAR',
+        items: [{ item_name: 'NCC Opt-Out Submission', price: 200, quantity: 1 }]
+      });
+    </script>
     <style>
         * {
             margin: 0;
