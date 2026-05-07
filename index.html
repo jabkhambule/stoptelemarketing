@@ -6,7 +6,6 @@
     <title>Stop Unwanted Telemarketing Calls — Official SA Opt-Out Service</title>
     <meta name="description" content="We handle the official NCC telemarketing opt-out process for you. No forms, no confusion. R199 once-off.">
 
-    <!-- Google Analytics GA4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HTC13XNNL3"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -14,8 +13,6 @@
       gtag('js', new Date());
       gtag('config', 'G-HTC13XNNL3');
     </script>
-
-    <!-- Microsoft Clarity -->
     <script type="text/javascript">
         (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -26,420 +23,866 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
 
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --dark:        #0f172a;
-            --dark-card:   #1e293b;
-            --teal:        #14b8a6;
-            --teal-dark:   #0f766e;
+            --bg:          #060e14;
+            --bg-card:     #0c1a26;
+            --bg-elevated: #0f2032;
+            --teal:        #00d4b8;
+            --teal-dim:    #00a896;
+            --teal-dark:   #007a6e;
             --amber:       #f59e0b;
             --amber-dark:  #d97706;
             --white:       #ffffff;
-            --off-white:   #f8fafc;
-            --text:        #1e293b;
-            --text-mid:    #475569;
-            --text-soft:   #94a3b8;
-            --border:      #e2e8f0;
-            --success:     #10b981;
-            --error:       #ef4444;
-            --radius:      14px;
+            --text:        #cce4f0;
+            --text-mid:    #6a8fa8;
+            --text-soft:   #3a5a70;
+            --border:      rgba(0,212,184,.14);
+            --border-soft: rgba(255,255,255,.06);
+            --radius:      16px;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'DM Sans', sans-serif;
             color: var(--text);
-            background: var(--white);
+            background: var(--bg);
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            line-height: 1.7;
         }
 
-        /* ── LAYOUT ─────────────────────────────── */
-        .wrap    { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-        .wrap-sm { max-width:  680px; margin: 0 auto; padding: 0 24px; }
+        /* Grain texture */
+        body::after {
+            content: '';
+            position: fixed; inset: 0; z-index: 9999;
+            opacity: .025; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 200px;
+        }
 
-        /* ── NAV ────────────────────────────────── */
+        /* ── LAYOUT ── */
+        .wrap    { max-width: 1100px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+        .wrap-sm { max-width: 680px;  margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+        /* ── NAV ── */
         nav {
             position: sticky; top: 0; z-index: 200;
-            background: rgba(15,23,42,0.96);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(6,14,20,.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-soft);
         }
         .nav-inner {
             display: flex; align-items: center; justify-content: space-between;
-            height: 64px;
+            height: 68px;
         }
         .nav-logo {
             font-family: 'Fraunces', serif;
             font-size: 20px; font-weight: 700;
             color: var(--teal); text-decoration: none;
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 10px;
+            letter-spacing: -.02em;
         }
-        .nav-logo span { font-size: 22px; }
+        .nav-logo .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dim) 100%);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 0 16px rgba(0,212,184,.35);
+        }
+        .nav-links {
+            display: flex; gap: 32px; list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-mid); text-decoration: none;
+            font-size: 14px; font-weight: 500;
+            transition: color .2s;
+        }
+        .nav-links a:hover { color: var(--text); }
         .nav-cta {
-            background: var(--amber); color: var(--dark);
-            padding: 10px 24px; border-radius: 8px;
+            background: var(--teal); color: #060e14;
+            padding: 10px 22px; border-radius: 8px;
             font-weight: 700; font-size: 14px;
-            text-decoration: none; transition: background .2s, transform .2s;
+            text-decoration: none;
+            transition: background .2s, transform .2s, box-shadow .2s;
+            box-shadow: 0 0 16px rgba(0,212,184,.3);
         }
-        .nav-cta:hover { background: var(--amber-dark); transform: translateY(-1px); }
+        .nav-cta:hover {
+            background: #00eecb;
+            transform: translateY(-1px);
+            box-shadow: 0 0 28px rgba(0,212,184,.5);
+        }
+        .nav-cta:active { transform: translateY(0); }
 
-        /* ── HERO ───────────────────────────────── */
+        /* ── HERO ── */
         .hero {
-            background: var(--dark);
-            padding: 90px 0 80px;
+            background: var(--bg);
+            padding: 100px 0 90px;
             position: relative; overflow: hidden;
+            min-height: 92vh;
+            display: flex; align-items: center;
         }
-        .hero::before {
-            content: '';
-            position: absolute; top: -200px; right: -150px;
-            width: 700px; height: 700px;
-            background: radial-gradient(circle, rgba(20,184,166,.15) 0%, transparent 65%);
-            border-radius: 50%; pointer-events: none;
+        .hero-glow-1 {
+            position: absolute; top: -120px; right: -80px;
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(0,212,184,.11) 0%, transparent 60%);
+            pointer-events: none;
         }
-        .hero-inner { position: relative; z-index: 1; }
-
-        .price-pill {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(245,158,11,.15);
-            border: 1px solid rgba(245,158,11,.4);
-            color: var(--amber);
+        .hero-glow-2 {
+            position: absolute; bottom: -180px; left: -120px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(245,158,11,.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(0,212,184,.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,184,.04) 1px, transparent 1px);
+            background-size: 64px 64px;
+            pointer-events: none;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+        }
+        .hero-inner {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 64px; align-items: center;
+            position: relative; z-index: 1;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0,212,184,.08);
+            border: 1px solid rgba(0,212,184,.22);
+            color: var(--teal);
             padding: 6px 16px; border-radius: 999px;
-            font-size: 14px; font-weight: 700; letter-spacing: .4px;
-            margin-bottom: 24px;
+            font-size: 13px; font-weight: 600; letter-spacing: .4px;
+            margin-bottom: 28px;
         }
-
+        .hero-badge::before {
+            content: '';
+            width: 7px; height: 7px;
+            background: var(--teal); border-radius: 50%;
+            box-shadow: 0 0 8px var(--teal);
+            animation: blink 2s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%,100% { opacity: 1; }
+            50%      { opacity: .4; }
+        }
         h1 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(42px, 6vw, 72px);
-            font-weight: 800; line-height: 1.08;
+            font-size: clamp(46px, 5.5vw, 74px);
+            font-weight: 800; line-height: 1.04;
             color: var(--white); letter-spacing: -.03em;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
         h1 em { color: var(--teal); font-style: normal; }
-
+        .line-block { display: block; }
         .hero-sub {
-            font-size: clamp(17px, 2vw, 20px);
-            color: #94a3b8; max-width: 520px;
-            line-height: 1.65; margin-bottom: 40px;
+            font-size: clamp(16px, 1.8vw, 18px);
+            color: var(--text-mid); max-width: 460px;
+            line-height: 1.8; margin-bottom: 40px;
         }
-
+        .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
         .hero-cta {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: var(--amber); color: var(--dark);
-            padding: 18px 40px; border-radius: 12px;
-            font-weight: 700; font-size: 18px;
-            text-decoration: none; transition: all .25s;
-            box-shadow: 0 8px 28px rgba(245,158,11,.35);
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--teal); color: #060e14;
+            padding: 16px 36px; border-radius: 12px;
+            font-weight: 700; font-size: 17px;
+            text-decoration: none;
+            transition: background .2s, transform .2s, box-shadow .2s;
+            box-shadow: 0 0 32px rgba(0,212,184,.35), 0 4px 20px rgba(0,212,184,.18);
         }
         .hero-cta:hover {
-            background: var(--amber-dark);
+            background: #00eecb;
             transform: translateY(-2px);
-            box-shadow: 0 12px 36px rgba(245,158,11,.45);
+            box-shadow: 0 0 56px rgba(0,212,184,.5), 0 8px 32px rgba(0,212,184,.28);
+        }
+        .hero-cta:active { transform: translateY(0); }
+        .hero-link {
+            color: var(--text-mid); font-size: 15px; font-weight: 500;
+            text-decoration: none; transition: color .2s;
+        }
+        .hero-link:hover { color: var(--text); }
+        .hero-stats {
+            display: flex; gap: 36px; margin-top: 52px; flex-wrap: wrap;
+        }
+        .hero-stat-num {
+            font-family: 'Fraunces', serif;
+            font-size: 38px; font-weight: 700;
+            color: var(--white); letter-spacing: -.025em; line-height: 1;
+        }
+        .hero-stat-num span { color: var(--teal); }
+        .hero-stat-label { font-size: 13px; color: var(--text-mid); margin-top: 5px; }
+
+        /* Hero visual */
+        .hero-visual {
+            position: relative;
+            display: flex; justify-content: center; align-items: center;
+            height: 440px;
+        }
+        .hero-orb {
+            width: 260px; height: 260px;
+            background: linear-gradient(135deg, rgba(0,212,184,.18) 0%, rgba(0,122,110,.1) 100%);
+            border-radius: 50%;
+            border: 1px solid rgba(0,212,184,.22);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            box-shadow:
+                0 0 80px rgba(0,212,184,.14),
+                0 0 160px rgba(0,212,184,.06),
+                inset 0 0 60px rgba(0,212,184,.07);
+            animation: orb-float 4s ease-in-out infinite;
+        }
+        @keyframes orb-float {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-14px); }
+        }
+        .hero-orb-inner { font-size: 100px; filter: drop-shadow(0 0 24px rgba(0,212,184,.7)); }
+        .hero-orb::before {
+            content: '';
+            position: absolute; inset: -22px; border-radius: 50%;
+            border: 1px solid rgba(0,212,184,.1);
+            animation: ring 3s ease-in-out infinite;
+        }
+        .hero-orb::after {
+            content: '';
+            position: absolute; inset: -44px; border-radius: 50%;
+            border: 1px solid rgba(0,212,184,.05);
+            animation: ring 3s ease-in-out .6s infinite;
+        }
+        @keyframes ring {
+            0%,100% { transform: scale(1); opacity: .5; }
+            50%      { transform: scale(1.04); opacity: 1; }
         }
 
-        .trust-row {
-            display: flex; flex-wrap: wrap; gap: 20px;
-            margin-top: 40px;
+        /* Floating pills */
+        .hero-pill {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 9px 18px;
+            font-size: 13px; font-weight: 600; color: var(--text);
+            white-space: nowrap;
+            display: flex; align-items: center; gap: 7px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.35), 0 0 0 1px rgba(0,212,184,.05);
         }
-        .trust-badge {
-            display: flex; align-items: center; gap: 8px;
-            color: #64748b; font-size: 13px; font-weight: 500;
+        .pill-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--teal); box-shadow: 0 0 8px var(--teal); flex-shrink: 0;
         }
-        .trust-badge span:first-child { font-size: 16px; }
+        .pill-1 { top: 8%;   left: -5%;  animation: pfloat 3.5s ease-in-out infinite; }
+        .pill-2 { top: 38%;  right: -8%; animation: pfloat 4s ease-in-out .4s infinite; }
+        .pill-3 { bottom: 28%; left: -8%; animation: pfloat 3.8s ease-in-out .8s infinite; }
+        .pill-4 { bottom: 8%;  right: -2%; animation: pfloat 4.2s ease-in-out .2s infinite; }
+        @keyframes pfloat {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-7px); }
+        }
 
-        /* ── HOW IT WORKS ───────────────────────── */
-        .how { background: var(--off-white); padding: 80px 0; }
+        /* ── SECTION SHARED ── */
         .section-tag {
-            display: inline-block;
-            background: rgba(20,184,166,.12); color: var(--teal-dark);
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(0,212,184,.08);
+            border: 1px solid rgba(0,212,184,.2);
+            color: var(--teal);
             padding: 5px 14px; border-radius: 999px;
-            font-size: 12px; font-weight: 700; letter-spacing: .8px;
-            text-transform: uppercase; margin-bottom: 14px;
+            font-size: 12px; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 16px;
         }
         h2 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(30px, 4vw, 44px); font-weight: 700;
-            line-height: 1.15; color: var(--text);
-            letter-spacing: -.02em; margin-bottom: 12px;
+            font-size: clamp(32px, 4vw, 50px); font-weight: 700;
+            line-height: 1.08; color: var(--white);
+            letter-spacing: -.025em; margin-bottom: 14px;
         }
-        .section-sub { font-size: 17px; color: var(--text-mid); margin-bottom: 52px; }
+        h2 em { color: var(--teal); font-style: normal; }
+        .section-sub { font-size: 17px; color: var(--text-mid); margin-bottom: 56px; max-width: 520px; line-height: 1.7; }
 
-        .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+        /* ── STATS BANNER ── */
+        .stats-banner {
+            background: linear-gradient(135deg, rgba(0,212,184,.07) 0%, rgba(0,212,184,.03) 100%);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 52px 0;
+        }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4,1fr);
+            text-align: center;
+        }
+        .stat-item { padding: 0 28px; border-right: 1px solid var(--border); }
+        .stat-item:last-child { border-right: none; }
+        .stat-num {
+            font-family: 'Fraunces', serif;
+            font-size: 46px; font-weight: 700;
+            color: var(--teal); letter-spacing: -.03em; line-height: 1;
+        }
+        .stat-label { font-size: 14px; color: var(--text-mid); margin-top: 8px; }
+
+        /* ── HOW IT WORKS ── */
+        .how {
+            background: var(--bg);
+            padding: 104px 0;
+            border-top: 1px solid var(--border-soft);
+        }
+        .steps {
+            display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
+            position: relative; margin-top: 0;
+        }
+        .steps-connector {
+            display: flex; align-items: flex-start;
+            justify-content: space-between;
+            padding: 0 calc(16.666% - 22px);
+            margin-bottom: -2px;
+            position: relative; z-index: 2;
+        }
         .step-card {
-            background: var(--white);
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 32px 28px;
+            border-radius: var(--radius); padding: 36px 28px;
             position: relative;
+            transition: border-color .3s, transform .3s, box-shadow .3s;
+        }
+        .step-card:hover {
+            border-color: rgba(0,212,184,.3);
+            transform: translateY(-5px);
+            box-shadow: 0 16px 48px rgba(0,0,0,.3), 0 0 0 1px rgba(0,212,184,.08);
         }
         .step-num {
-            width: 44px; height: 44px;
-            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
-            color: white; border-radius: 50%;
+            width: 46px; height: 46px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dim) 100%);
+            color: #060e14; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700;
-            margin-bottom: 18px;
+            font-family: 'Fraunces', serif; font-size: 21px; font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 0 24px rgba(0,212,184,.45);
         }
-        .step-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-        .step-desc  { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
-        .step-connector {
+        .step-icon { font-size: 26px; margin-bottom: 10px; }
+        .step-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--white); }
+        .step-desc  { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+
+        /* connector line */
+        .steps-line {
+            position: relative;
+            grid-column: 1 / -1;
             display: none;
         }
+        .steps-line-wrap {
+            display: grid; grid-template-columns: repeat(3,1fr);
+            position: absolute; inset: 0; z-index: 0;
+            pointer-events: none;
+        }
 
-        /* ── ORDER FORM ─────────────────────────── */
-        .order-section { background: var(--white); padding: 80px 0; }
+        /* ── TESTIMONIALS ── */
+        .testimonials {
+            background: var(--bg);
+            padding: 104px 0;
+            border-top: 1px solid var(--border-soft);
+        }
+        .testimonials-grid {
+            display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
+        }
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 32px 28px;
+            transition: border-color .3s, transform .3s, box-shadow .3s;
+            position: relative; overflow: hidden;
+        }
+        .testimonial-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--teal), transparent);
+            opacity: 0; transition: opacity .3s;
+        }
+        .testimonial-card:hover {
+            border-color: rgba(0,212,184,.25);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0,0,0,.3);
+        }
+        .testimonial-card:hover::before { opacity: 1; }
+        .testimonial-stars { color: var(--amber); font-size: 15px; margin-bottom: 16px; letter-spacing: 3px; }
+        .testimonial-text {
+            font-size: 15px; color: var(--text-mid); line-height: 1.75;
+            margin-bottom: 24px; font-style: italic;
+        }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .author-avatar {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--teal-dark), var(--teal-dim));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 15px; color: white; flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(0,212,184,.2);
+        }
+        .author-name { font-size: 14px; font-weight: 700; color: var(--white); }
+        .author-loc  { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+
+        /* ── ORDER FORM ── */
+        .order-section {
+            background: var(--bg);
+            padding: 104px 0;
+            border-top: 1px solid var(--border-soft);
+        }
         .form-card {
-            background: var(--white);
-            border: 1.5px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 40px rgba(0,0,0,.08);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px; overflow: hidden;
+            box-shadow: 0 24px 80px rgba(0,0,0,.45), 0 0 0 1px rgba(0,212,184,.04);
             max-width: 580px; margin: 0 auto;
         }
         .form-card-header {
-            background: linear-gradient(135deg, var(--teal-dark) 0%, #065f46 100%);
+            background: linear-gradient(135deg, rgba(0,168,150,.22) 0%, rgba(0,80,72,.18) 100%);
+            border-bottom: 1px solid rgba(0,212,184,.14);
             padding: 28px 36px;
-            color: white;
         }
         .form-card-header h3 {
             font-family: 'Fraunces', serif;
-            font-size: 22px; font-weight: 700; margin-bottom: 4px;
+            font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--white);
         }
-        .form-card-header p { font-size: 14px; opacity: .85; }
-        .form-card-body { padding: 36px; }
+        .form-card-header p { font-size: 14px; color: var(--text-mid); }
 
+        /* Progress */
+        .form-progress {
+            display: flex; padding: 20px 36px;
+            border-bottom: 1px solid var(--border-soft);
+            background: rgba(0,0,0,.18);
+            gap: 0;
+        }
+        .progress-step {
+            flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+            position: relative;
+        }
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute; top: 13px; left: calc(50% + 14px); right: calc(-50% + 14px);
+            height: 2px; background: rgba(255,255,255,.08);
+            transition: background .4s;
+        }
+        .progress-step.done:not(:last-child)::after { background: var(--teal); }
+        .progress-step.active:not(:last-child)::after { background: rgba(0,212,184,.3); }
+        .progress-dot {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--bg-elevated);
+            border: 2px solid var(--text-soft);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; color: var(--text-soft);
+            transition: all .35s; position: relative; z-index: 1;
+        }
+        .progress-step.active .progress-dot {
+            background: var(--teal); border-color: var(--teal);
+            color: #060e14; box-shadow: 0 0 14px rgba(0,212,184,.55);
+        }
+        .progress-step.done .progress-dot {
+            background: rgba(0,212,184,.15); border-color: var(--teal); color: var(--teal);
+        }
+        .progress-label { font-size: 11px; color: var(--text-soft); font-weight: 500; transition: color .3s; }
+        .progress-step.active .progress-label { color: var(--teal); }
+        .progress-step.done .progress-label  { color: var(--teal-dim); }
+
+        .form-card-body { padding: 32px 36px; }
         .privacy-note {
-            background: #f0fdfa; border-left: 3px solid var(--teal);
-            padding: 14px 18px; border-radius: 8px;
+            background: rgba(0,212,184,.06);
+            border: 1px solid rgba(0,212,184,.15);
+            border-left: 3px solid var(--teal);
+            padding: 14px 18px; border-radius: 10px;
             font-size: 13px; color: var(--text-mid); line-height: 1.6;
             margin-bottom: 28px;
         }
-
         #alertContainer { margin-bottom: 16px; }
-
-        .form-step { }
-        .step-header {
-            display: flex; align-items: center; gap: 12px;
-            margin-bottom: 24px;
-        }
+        .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
         .step-number {
-            width: 34px; height: 34px; flex-shrink: 0;
-            background: var(--teal-dark); color: white;
+            width: 32px; height: 32px; flex-shrink: 0;
+            background: rgba(0,212,184,.12); color: var(--teal);
+            border: 1px solid rgba(0,212,184,.28);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 16px;
+            font-weight: 700; font-size: 15px;
         }
-        .step-title { font-size: 18px; font-weight: 700; color: var(--text); }
+        .step-title { font-size: 18px; font-weight: 700; color: var(--white); }
         .form-group { margin-bottom: 20px; }
         label {
-            display: block; margin-bottom: 7px;
-            font-weight: 600; font-size: 14px; color: var(--text);
+            display: block; margin-bottom: 8px;
+            font-weight: 600; font-size: 13px;
+            color: var(--text-mid); letter-spacing: .3px;
         }
         input[type="text"], input[type="email"], input[type="tel"], select, textarea {
-            width: 100%; padding: 13px 15px;
-            border: 1.5px solid var(--border); border-radius: 10px;
+            width: 100%; padding: 13px 16px;
+            background: rgba(0,0,0,.28);
+            border: 1px solid rgba(255,255,255,.1); border-radius: 10px;
             font-size: 15px; font-family: 'DM Sans', sans-serif;
-            background: white; color: var(--text);
+            color: var(--text);
             transition: border-color .2s, box-shadow .2s;
         }
+        input::placeholder, textarea::placeholder { color: var(--text-soft); }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%236a8fa8' d='M5.23 7.21L10 11.98l4.77-4.77 1.42 1.41L10 14.82 3.81 8.62z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
+            padding-right: 38px;
+        }
+        select option { background: #0c1a26; color: var(--text); }
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--teal);
-            box-shadow: 0 0 0 3px rgba(20,184,166,.12);
+            box-shadow: 0 0 0 3px rgba(0,212,184,.12);
         }
         textarea { min-height: 80px; resize: vertical; }
         .input-hint { font-size: 12px; color: var(--text-soft); margin-top: 5px; }
-
         .verify-section { display: flex; gap: 10px; align-items: flex-start; }
         .verify-section input { flex: 1; }
 
+        /* Form buttons */
         button {
-            background: var(--teal-dark); color: white;
-            border: none; padding: 14px 28px; border-radius: 10px;
-            font-weight: 700; font-size: 15px; cursor: pointer;
-            transition: all .2s; font-family: 'DM Sans', sans-serif;
+            background: rgba(0,168,150,.15); color: var(--teal);
+            border: 1px solid rgba(0,212,184,.28);
+            padding: 13px 24px; border-radius: 10px;
+            font-weight: 700; font-size: 14px; cursor: pointer;
+            transition: background .2s, transform .2s, box-shadow .2s;
+            font-family: 'DM Sans', sans-serif;
             display: inline-flex; align-items: center; gap: 8px;
         }
-        button:hover:not(:disabled) { background: #065f46; transform: translateY(-1px); }
-        button:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
-
+        button:hover:not(:disabled) {
+            background: rgba(0,212,184,.2);
+            box-shadow: 0 0 24px rgba(0,212,184,.2);
+            transform: translateY(-1px);
+        }
+        button:active:not(:disabled) { transform: translateY(0); }
+        button:disabled { opacity: .35; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-primary {
+            width: 100%; justify-content: center;
+            background: var(--teal); color: #060e14; border: none;
+            padding: 16px; font-size: 16px; border-radius: 12px;
+            box-shadow: 0 0 28px rgba(0,212,184,.32), 0 4px 16px rgba(0,212,184,.18);
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #00eecb;
+            box-shadow: 0 0 50px rgba(0,212,184,.48), 0 8px 28px rgba(0,212,184,.28);
+        }
         .proceed-button {
-            width: 100%; padding: 17px;
-            background: var(--amber); color: var(--dark);
+            width: 100%; padding: 17px; justify-content: center;
+            background: var(--teal); color: #060e14; border: none;
             font-size: 17px; font-weight: 700; margin-top: 28px;
-            border-radius: 12px; justify-content: center;
-            box-shadow: 0 4px 16px rgba(245,158,11,.3);
+            border-radius: 12px;
+            box-shadow: 0 0 32px rgba(0,212,184,.32), 0 4px 18px rgba(0,212,184,.18);
         }
         .proceed-button:hover:not(:disabled) {
-            background: var(--amber-dark);
-            box-shadow: 0 6px 20px rgba(245,158,11,.4);
+            background: #00eecb;
+            box-shadow: 0 0 56px rgba(0,212,184,.5), 0 8px 32px rgba(0,212,184,.28);
+        }
+        .proceed-button:disabled {
+            background: var(--bg-elevated); color: var(--text-soft);
+            box-shadow: none; border: 1px solid var(--border);
         }
 
         .file-upload {
-            border: 2px dashed var(--border); border-radius: 12px;
-            padding: 36px; text-align: center;
-            background: var(--off-white); cursor: pointer;
+            border: 2px dashed rgba(0,212,184,.2); border-radius: 14px;
+            padding: 44px; text-align: center;
+            background: rgba(0,212,184,.03); cursor: pointer;
             transition: border-color .2s, background .2s;
         }
-        .file-upload:hover { border-color: var(--teal); background: #f0fdfa; }
+        .file-upload:hover { border-color: rgba(0,212,184,.45); background: rgba(0,212,184,.07); }
         .file-upload input { display: none; }
         .upload-icon { font-size: 40px; margin-bottom: 12px; }
         .upload-text { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
         .upload-hint { font-size: 13px; color: var(--text-soft); }
         .file-selected {
             display: flex; align-items: center; gap: 10px;
-            padding: 14px 16px; background: var(--success);
-            color: white; border-radius: 10px; margin-top: 14px;
+            padding: 13px 16px;
+            background: rgba(0,212,184,.1); border: 1px solid rgba(0,212,184,.28);
+            color: var(--teal); border-radius: 10px; margin-top: 14px;
             font-weight: 600; font-size: 14px;
         }
-
         .legal-note {
-            background: var(--off-white); border-left: 3px solid var(--border);
-            padding: 18px 20px; border-radius: 8px; margin-top: 28px;
-            font-size: 13px; color: var(--text-mid); line-height: 1.65;
+            background: rgba(255,255,255,.025); border-left: 3px solid rgba(255,255,255,.08);
+            padding: 16px 20px; border-radius: 8px; margin-top: 28px;
+            font-size: 13px; color: var(--text-soft); line-height: 1.7;
         }
-
         .alert {
-            padding: 14px 18px; border-radius: 10px;
+            padding: 13px 18px; border-radius: 10px;
             display: flex; align-items: center; gap: 10px;
             font-size: 14px; margin-bottom: 16px;
         }
-        .alert-success { background: #d1fae5; color: #065f46; border: 1.5px solid var(--success); }
-        .alert-error   { background: #fee2e2; color: #991b1b; border: 1.5px solid var(--error); }
+        .alert-success { background: rgba(0,212,184,.1); color: var(--teal); border: 1px solid rgba(0,212,184,.28); }
+        .alert-error   { background: rgba(239,68,68,.1); color: #f87171; border: 1px solid rgba(239,68,68,.28); }
         .alert-icon    { font-size: 18px; }
-
         .hidden { display: none !important; }
         .spinner {
             display: inline-block; width: 14px; height: 14px;
-            border: 2px solid rgba(255,255,255,.3);
-            border-top-color: white; border-radius: 50%;
+            border: 2px solid rgba(0,212,184,.3);
+            border-top-color: var(--teal); border-radius: 50%;
             animation: spin .6s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── WHY CHOOSE US ──────────────────────── */
-        .why { background: var(--off-white); padding: 80px 0; }
+        /* ── WHY CHOOSE US ── */
+        .why {
+            background: var(--bg);
+            padding: 104px 0;
+            border-top: 1px solid var(--border-soft);
+        }
         .benefits-grid {
             display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
-            margin-top: 48px;
         }
         .benefit-card {
-            background: var(--white); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 28px 24px;
-            transition: transform .25s, box-shadow .25s;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 34px 28px;
+            transition: transform .3s, border-color .3s, box-shadow .3s;
+            position: relative; overflow: hidden;
         }
-        .benefit-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,.07); }
+        .benefit-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--teal), transparent);
+            opacity: 0; transition: opacity .3s;
+        }
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0,212,184,.28);
+            box-shadow: 0 20px 56px rgba(0,0,0,.32);
+        }
+        .benefit-card:hover::before { opacity: 1; }
         .benefit-icon {
-            width: 50px; height: 50px; border-radius: 12px;
-            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+            width: 54px; height: 54px; border-radius: 14px;
+            background: rgba(0,212,184,.1);
+            border: 1px solid rgba(0,212,184,.18);
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px; margin-bottom: 16px;
+            font-size: 26px; margin-bottom: 20px;
         }
-        .benefit-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-        .benefit-desc  { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+        .benefit-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--white); }
+        .benefit-desc  { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
 
-        /* ── FAQ ────────────────────────────────── */
-        .faq { background: var(--white); padding: 80px 0; }
-        .faq-list { display: flex; flex-direction: column; gap: 16px; margin-top: 48px; }
+        /* ── FAQ ── */
+        .faq { background: var(--bg); padding: 104px 0; border-top: 1px solid var(--border-soft); }
+        .faq-list { display: flex; flex-direction: column; gap: 12px; }
         .faq-item {
-            background: var(--off-white); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 24px 28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius); overflow: hidden;
+            transition: border-color .3s;
         }
-        .faq-q { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
-        .faq-a { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+        .faq-item.open { border-color: rgba(0,212,184,.28); }
+        .faq-q {
+            padding: 22px 28px; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 16px; font-weight: 600; color: var(--text);
+            transition: color .2s; user-select: none;
+        }
+        .faq-q:hover { color: var(--white); }
+        .faq-item.open .faq-q { color: var(--teal); }
+        .faq-chevron {
+            width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+            background: rgba(0,212,184,.08);
+            border: 1px solid rgba(0,212,184,.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; transition: transform .3s, background .3s;
+            color: var(--teal);
+        }
+        .faq-item.open .faq-chevron { transform: rotate(180deg); background: rgba(0,212,184,.18); }
+        .faq-body { max-height: 0; overflow: hidden; transition: max-height .4s cubic-bezier(0,1,.5,1); }
+        .faq-item.open .faq-body { max-height: 320px; }
+        .faq-a { padding: 0 28px 22px; font-size: 15px; color: var(--text-mid); line-height: 1.75; }
 
-        /* ── FOOTER ─────────────────────────────── */
+        /* ── FOOTER ── */
         footer {
-            background: var(--dark); color: #64748b;
-            padding: 48px 0 32px; text-align: center;
+            background: #040a10;
+            border-top: 1px solid var(--border-soft);
+            padding: 64px 0 36px;
+        }
+        .footer-inner {
+            display: grid; grid-template-columns: 2fr 1fr 1fr;
+            gap: 56px; margin-bottom: 56px;
         }
         .footer-logo {
             font-family: 'Fraunces', serif; font-size: 20px;
-            font-weight: 700; color: var(--teal); margin-bottom: 20px;
+            font-weight: 700; color: var(--teal);
+            display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
         }
-        .footer-links { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px; }
-        .footer-links a { color: #64748b; text-decoration: none; font-size: 14px; transition: color .2s; }
-        .footer-links a:hover { color: white; }
-        .footer-copy { font-size: 13px; }
+        .footer-logo .logo-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dim) 100%);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-size: 16px; box-shadow: 0 0 12px rgba(0,212,184,.3);
+        }
+        .footer-desc { font-size: 14px; color: var(--text-soft); line-height: 1.75; max-width: 240px; }
+        .footer-col-title { font-size: 12px; font-weight: 700; color: var(--text-mid); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 18px; }
+        .footer-col-links { display: flex; flex-direction: column; gap: 12px; }
+        .footer-col-links a { color: var(--text-soft); text-decoration: none; font-size: 14px; transition: color .2s; }
+        .footer-col-links a:hover { color: var(--teal); }
+        .footer-bottom {
+            border-top: 1px solid var(--border-soft); padding-top: 28px;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+        }
+        .footer-copy { font-size: 13px; color: var(--text-soft); }
+        .footer-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+        .footer-badge {
+            background: rgba(0,212,184,.06); border: 1px solid var(--border);
+            padding: 5px 12px; border-radius: 6px;
+            font-size: 12px; color: var(--text-mid); font-weight: 500;
+        }
 
-        /* ── MOBILE STICKY BAR ──────────────────── */
+        /* ── MOBILE STICKY ── */
         .sticky-mobile {
             display: none;
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
-            background: var(--amber);
-            padding: 14px 24px;
-            text-align: center;
-            box-shadow: 0 -4px 20px rgba(0,0,0,.15);
+            background: var(--teal); padding: 15px 24px; text-align: center;
+            box-shadow: 0 -4px 32px rgba(0,212,184,.32);
         }
-        .sticky-mobile a {
-            color: var(--dark); font-weight: 700; font-size: 16px;
-            text-decoration: none; display: block;
-        }
+        .sticky-mobile a { color: #060e14; font-weight: 700; font-size: 16px; text-decoration: none; display: block; }
 
-        /* ── RESPONSIVE ─────────────────────────── */
+        /* ── RESPONSIVE ── */
+        @media (max-width: 960px) {
+            .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+            .hero-visual { order: -1; height: 320px; }
+            .hero-orb { width: 190px; height: 190px; }
+            .hero-orb-inner { font-size: 76px; }
+            .pill-1, .pill-2, .pill-3, .pill-4 { font-size: 12px; padding: 7px 14px; }
+            .stats-grid { grid-template-columns: repeat(2,1fr); }
+            .stat-item:nth-child(2) { border-right: none; }
+            .stat-item:nth-child(3), .stat-item:nth-child(4) { border-top: 1px solid var(--border); padding-top: 28px; margin-top: 28px; }
+            .stat-item:nth-child(3) { border-right: 1px solid var(--border); }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+            .footer-inner > :first-child { grid-column: 1 / -1; }
+        }
         @media (max-width: 768px) {
-            .steps          { grid-template-columns: 1fr; gap: 16px; }
-            .benefits-grid  { grid-template-columns: 1fr; }
-            .hero           { padding: 60px 0 60px; }
-            .how, .order-section, .why, .faq { padding: 60px 0; }
-            .form-card-body { padding: 24px 20px; }
+            .steps, .benefits-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .hero { padding: 72px 0 64px; min-height: auto; }
+            .how, .order-section, .why, .faq, .testimonials, .stats-banner { padding: 72px 0; }
+            .form-card-body, .form-card-header { padding: 22px 20px; }
+            .form-progress { padding: 16px 20px; }
+            .progress-label { display: none; }
             .verify-section { flex-direction: column; }
             .verify-section button { width: 100%; }
-            .sticky-mobile  { display: block; }
-            body            { padding-bottom: 64px; }
-            h1              { font-size: 38px; }
+            .sticky-mobile { display: block; }
+            body { padding-bottom: 62px; }
+            h1 { font-size: 40px; }
+            .nav-links { display: none; }
+            .footer-inner { grid-template-columns: 1fr; }
+            .footer-inner > :first-child { grid-column: auto; }
+            .pill-1, .pill-2, .pill-3, .pill-4 { display: none; }
+            .hero-visual { height: 220px; }
+            .hero-orb { width: 160px; height: 160px; }
+            .hero-orb-inner { font-size: 64px; }
         }
     </style>
 </head>
 <body>
 
-<!-- ── NAV ────────────────────────────────────────── -->
+<!-- NAV -->
 <nav>
     <div class="wrap nav-inner">
-        <a href="#" class="nav-logo"><span>🛡️</span> StopTelemarketing</a>
+        <a href="#" class="nav-logo">
+            <span class="logo-icon">🛡️</span>
+            StopTelemarketing
+        </a>
+        <ul class="nav-links">
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#why">Why Us</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
         <a href="#order" class="nav-cta">Get Started — R199</a>
     </div>
 </nav>
 
-<!-- ── HERO ───────────────────────────────────────── -->
+<!-- HERO -->
 <section class="hero">
-    <div class="wrap-sm hero-inner">
-        <div class="price-pill">⚡ R199 Once-Off · No Subscriptions</div>
-        <h1>Finally. <em>No More</em><br>Spam Calls.</h1>
-        <p class="hero-sub">We handle the official NCC opt-out on your behalf. Takes 2 minutes. Done for you.</p>
-        <a href="#order" class="hero-cta">Stop My Calls Now →</a>
-        <div class="trust-row">
-            <div class="trust-badge"><span>🔒</span><span>NCC Official Process</span></div>
-            <div class="trust-badge"><span>💳</span><span>Secure PayFast Payment</span></div>
-            <div class="trust-badge"><span>🛡️</span><span>POPIA Compliant</span></div>
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    <div class="hero-grid"></div>
+    <div class="wrap">
+        <div class="hero-inner">
+            <div class="hero-content">
+                <div class="hero-badge">⚡ R199 Once-Off · No Subscriptions</div>
+                <h1>
+                    <span class="line-block">Finally.</span>
+                    <span class="line-block"><em>No More</em></span>
+                    <span class="line-block">Spam Calls.</span>
+                </h1>
+                <p class="hero-sub">We handle the official NCC opt-out on your behalf. Takes 2 minutes. Done for you — properly.</p>
+                <div class="hero-actions">
+                    <a href="#order" class="hero-cta">Stop My Calls Now →</a>
+                    <a href="#how" class="hero-link">How it works ↓</a>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">2<span>,400+</span></div>
+                        <div class="hero-stat-label">South Africans opted out</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">2<span> min</span></div>
+                        <div class="hero-stat-label">Average completion</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">4.9<span>★</span></div>
+                        <div class="hero-stat-label">Customer satisfaction</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-orb">
+                    <div class="hero-orb-inner">🛡️</div>
+                </div>
+                <div class="hero-pill pill-1"><span class="pill-dot"></span> NCC Official Process</div>
+                <div class="hero-pill pill-2"><span class="pill-dot"></span> POPIA Compliant</div>
+                <div class="hero-pill pill-3"><span class="pill-dot"></span> Secure PayFast</div>
+                <div class="hero-pill pill-4"><span class="pill-dot"></span> 2 min setup</div>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ── HOW IT WORKS ────────────────────────────────── -->
-<section class="how">
+<!-- STATS BANNER -->
+<div class="stats-banner">
     <div class="wrap">
-        <div class="wrap-sm" style="padding:0 24px;">
-            <span class="section-tag">How It Works</span>
-            <h2>Three steps. That's it.</h2>
-            <p class="section-sub">We make the opt-out process as simple as possible.</p>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-num">2,400+</div>
+                <div class="stat-label">Registrations submitted</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">R199</div>
+                <div class="stat-label">Once-off, no hidden fees</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">2 min</div>
+                <div class="stat-label">Average completion time</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">100%</div>
+                <div class="stat-label">POPIA compliant</div>
+            </div>
         </div>
+    </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+    <div class="wrap">
+        <span class="section-tag">How It Works</span>
+        <h2>Three steps. <em>That's it.</em></h2>
+        <p class="section-sub">We make the official NCC opt-out process as simple as it can be.</p>
         <div class="steps">
             <div class="step-card">
                 <div class="step-num">1</div>
+                <div class="step-icon">📝</div>
                 <div class="step-title">Fill in your details</div>
                 <div class="step-desc">Complete the short form with your personal info and upload your ID. Takes about 2 minutes.</div>
             </div>
             <div class="step-card">
                 <div class="step-num">2</div>
+                <div class="step-icon">🔒</div>
                 <div class="step-title">Pay securely — R199</div>
-                <div class="step-desc">Once-off payment via PayFast. No subscription. No hidden fees. Your payment is fully secured.</div>
+                <div class="step-desc">Once-off payment via PayFast. No subscription, no hidden fees. Your payment is fully secured.</div>
             </div>
             <div class="step-card">
                 <div class="step-num">3</div>
+                <div class="step-icon">✅</div>
                 <div class="step-title">We submit to the NCC</div>
                 <div class="step-desc">We handle the official opt-out submission on your behalf. You get a confirmation email when done.</div>
             </div>
@@ -447,11 +890,55 @@
     </div>
 </section>
 
-<!-- ── ORDER FORM ──────────────────────────────────── -->
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+    <div class="wrap">
+        <span class="section-tag">Testimonials</span>
+        <h2>What our customers <em>say</em></h2>
+        <p class="section-sub">Thousands of South Africans have already opted out. Here's what some of them think.</p>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I was getting 5–6 spam calls a day. Within a few weeks of submitting, they dropped to almost nothing. Wish I had done this sooner."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">TN</div>
+                    <div>
+                        <div class="author-name">Thabo N.</div>
+                        <div class="author-loc">Johannesburg, GP</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Super easy process. I tried doing it myself through the NCC site and got confused. This was done in under 3 minutes. Worth every rand."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SR</div>
+                    <div>
+                        <div class="author-name">Sarah R.</div>
+                        <div class="author-loc">Cape Town, WC</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Got the confirmation email quickly. The whole process was smooth and professional. My whole family has now signed up."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">PD</div>
+                    <div>
+                        <div class="author-name">Priya D.</div>
+                        <div class="author-loc">Durban, KZN</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ORDER FORM -->
 <section id="order" class="order-section">
     <div class="wrap-sm">
         <span class="section-tag">Register Now</span>
-        <h2>Complete Your Registration</h2>
+        <h2>Complete Your <em>Registration</em></h2>
         <p class="section-sub" style="margin-bottom:36px;">Secure form · Takes 2 minutes · Once-off R199 payment</p>
 
         <div class="form-card">
@@ -459,29 +946,49 @@
                 <h3>🛡️ Stop Telemarketing Calls</h3>
                 <p>Fill in your details below to get started. Your information is handled securely.</p>
             </div>
+
+            <div class="form-progress" id="formProgress">
+                <div class="progress-step active" id="prog-1">
+                    <div class="progress-dot">1</div>
+                    <div class="progress-label">Personal</div>
+                </div>
+                <div class="progress-step" id="prog-2">
+                    <div class="progress-dot">2</div>
+                    <div class="progress-label">Contact</div>
+                </div>
+                <div class="progress-step" id="prog-3">
+                    <div class="progress-dot">3</div>
+                    <div class="progress-label">Verify</div>
+                </div>
+                <div class="progress-step" id="prog-4">
+                    <div class="progress-dot">4</div>
+                    <div class="progress-label">Upload</div>
+                </div>
+            </div>
+
             <div class="form-card-body">
                 <div class="privacy-note">
-                    <strong>Your privacy matters:</strong> Your information is used only to submit your opt-out request and is handled confidentially in line with POPIA.
+                    <strong style="color:var(--teal)">Your privacy matters:</strong> Your information is used only to submit your opt-out request and handled confidentially in line with POPIA.
                 </div>
 
                 <div id="alertContainer"></div>
 
-                <!-- Step 1: Personal Details -->
+                <!-- Step 1 -->
                 <div class="form-step" id="step1">
                     <div class="step-header">
                         <span class="step-number">1</span>
                         <span class="step-title">Your Personal Details</span>
                     </div>
                     <div class="form-group">
-                        <label for="firstName">First Name <span style="color:var(--error)">*</span></label>
+                        <label for="firstName">First Name <span style="color:#f87171">*</span></label>
                         <input type="text" id="firstName" required placeholder="John">
                     </div>
                     <div class="form-group">
-                        <label for="surname">Surname <span style="color:var(--error)">*</span></label>
+                        <label for="surname">Surname <span style="color:#f87171">*</span></label>
                         <input type="text" id="surname" required placeholder="Smith">
                     </div>
                     <div class="form-group">
-                        <label for="idType">ID Type <span style="color:var(--error)">*</span></label>
+                        <label for="idType">ID Type <span style="color:#f87171">*</span></label>
                         <select id="idType" required>
                             <option value="">Select ID Type</option>
                             <option value="RSA ID">South African ID</option>
@@ -489,12 +996,12 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="idNumber">ID / Passport Number <span style="color:var(--error)">*</span></label>
+                        <label for="idNumber">ID / Passport Number <span style="color:#f87171">*</span></label>
                         <input type="text" id="idNumber" required placeholder="8001015009087">
                         <p class="input-hint">13-digit SA ID number or passport number</p>
                     </div>
                     <div class="form-group">
-                        <label for="gender">Gender <span style="color:var(--error)">*</span></label>
+                        <label for="gender">Gender <span style="color:#f87171">*</span></label>
                         <select id="gender" required>
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>
@@ -503,7 +1010,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="maritalStatus">Marital Status <span style="color:var(--error)">*</span></label>
+                        <label for="maritalStatus">Marital Status <span style="color:#f87171">*</span></label>
                         <select id="maritalStatus" required>
                             <option value="">Select Status</option>
                             <option value="Single">Single</option>
@@ -512,24 +1019,24 @@
                             <option value="Widowed">Widowed</option>
                         </select>
                     </div>
-                    <button onclick="validateStep1()" id="step1Btn" type="button" style="width:100%;justify-content:center;">
+                    <button onclick="validateStep1()" id="step1Btn" type="button" class="btn-primary">
                         <span id="step1Text">Continue to Contact Details →</span>
                     </button>
                 </div>
 
-                <!-- Step 2: Contact Details -->
+                <!-- Step 2 -->
                 <div class="form-step hidden" id="step2">
                     <div class="step-header">
                         <span class="step-number">2</span>
                         <span class="step-title">Your Contact Details</span>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email Address <span style="color:var(--error)">*</span></label>
+                        <label for="email">Email Address <span style="color:#f87171">*</span></label>
                         <input type="email" id="email" required placeholder="john@example.com">
                         <p class="input-hint">We'll send a verification code here</p>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Mobile Phone <span style="color:var(--error)">*</span></label>
+                        <label for="phone">Mobile Phone <span style="color:#f87171">*</span></label>
                         <input type="tel" id="phone" required placeholder="0821234567">
                         <p class="input-hint">This number will be registered for opt-out</p>
                     </div>
@@ -538,24 +1045,24 @@
                         <input type="tel" id="workPhone" placeholder="0115551234">
                     </div>
                     <div class="form-group">
-                        <label for="address">Physical Address <span style="color:var(--error)">*</span></label>
+                        <label for="address">Physical Address <span style="color:#f87171">*</span></label>
                         <textarea id="address" required placeholder="123 Main Street, Johannesburg, 2000"></textarea>
                         <p class="input-hint">Full address as required by NCC</p>
                     </div>
-                    <button onclick="sendVerificationCode()" id="sendCodeBtn" type="button" style="width:100%;justify-content:center;">
+                    <button onclick="sendVerificationCode()" id="sendCodeBtn" type="button" class="btn-primary">
                         <span id="sendCodeText">Send Verification Code</span>
                         <span id="sendCodeSpinner" class="spinner hidden"></span>
                     </button>
                 </div>
 
-                <!-- Step 3: Email Verification -->
+                <!-- Step 3 -->
                 <div class="form-step hidden" id="step3">
                     <div class="step-header">
                         <span class="step-number">3</span>
                         <span class="step-title">Verify Your Email</span>
                     </div>
                     <div class="form-group">
-                        <label for="verificationCode">Verification Code <span style="color:var(--error)">*</span></label>
+                        <label for="verificationCode">Verification Code <span style="color:#f87171">*</span></label>
                         <div class="verify-section">
                             <input type="text" id="verificationCode" placeholder="Enter 6-digit code" maxlength="6">
                             <button onclick="verifyCode()" id="verifyBtn" type="button">
@@ -567,14 +1074,14 @@
                     </div>
                 </div>
 
-                <!-- Step 4: Upload ID -->
+                <!-- Step 4 -->
                 <div class="form-step hidden" id="step4">
                     <div class="step-header">
                         <span class="step-number">4</span>
                         <span class="step-title">Upload ID Document</span>
                     </div>
                     <div class="form-group">
-                        <label>ID Document or Passport <span style="color:var(--error)">*</span></label>
+                        <label>ID Document or Passport <span style="color:#f87171">*</span></label>
                         <div class="file-upload" onclick="document.getElementById('idDocument').click()">
                             <input type="file" id="idDocument" accept="image/*,.pdf" onchange="handleFileSelect(this)">
                             <div class="upload-icon">📄</div>
@@ -606,14 +1113,12 @@
     </div>
 </section>
 
-<!-- ── WHY CHOOSE US ───────────────────────────────── -->
-<section class="why">
+<!-- WHY CHOOSE US -->
+<section class="why" id="why">
     <div class="wrap">
-        <div class="wrap-sm" style="padding:0 24px;">
-            <span class="section-tag">Why Choose Us</span>
-            <h2>Done-for-you. Properly.</h2>
-            <p class="section-sub">No forms to figure out. No government portals to navigate. We handle it.</p>
-        </div>
+        <span class="section-tag">Why Choose Us</span>
+        <h2>Done-for-you. <em>Properly.</em></h2>
+        <p class="section-sub">No forms to figure out. No government portals to navigate. We handle it all.</p>
         <div class="benefits-grid">
             <div class="benefit-card">
                 <div class="benefit-icon">📋</div>
@@ -623,84 +1128,140 @@
             <div class="benefit-card">
                 <div class="benefit-icon">⚡</div>
                 <div class="benefit-title">Takes 2 Minutes</div>
-                <div class="benefit-desc">Our streamlined form collects only what's needed. No confusion, no back-and-forth, no government portals.</div>
+                <div class="benefit-desc">Our streamlined form collects only what's needed. No confusion, no back-and-forth, no government portals to navigate.</div>
             </div>
             <div class="benefit-card">
                 <div class="benefit-icon">🔐</div>
                 <div class="benefit-title">Fully Confidential</div>
-                <div class="benefit-desc">Your data is used only to submit your opt-out. We don't sell, share, or market to you. POPIA compliant.</div>
+                <div class="benefit-desc">Your data is used only to submit your opt-out. We don't sell, share, or market to you. POPIA compliant, always.</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ── FAQ ────────────────────────────────────────── -->
+<!-- FAQ -->
 <section class="faq" id="faq">
     <div class="wrap-sm">
         <span class="section-tag">FAQ</span>
-        <h2>Common Questions</h2>
+        <h2>Common <em>Questions</em></h2>
+        <p class="section-sub" style="margin-bottom:40px;">Everything you need to know about the service.</p>
         <div class="faq-list">
             <div class="faq-item">
-                <div class="faq-q">Is this an official government service?</div>
-                <div class="faq-a">No. We're a private service that handles the official NCC opt-out process on your behalf. The opt-out itself is registered with the government — we just do the paperwork for you.</div>
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    Is this an official government service?
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-body">
+                    <div class="faq-a">No. We're a private service that handles the official NCC opt-out process on your behalf. The opt-out itself is registered with the government — we just do the paperwork for you.</div>
+                </div>
             </div>
             <div class="faq-item">
-                <div class="faq-q">Can I do this myself for free?</div>
-                <div class="faq-a">Yes — you can submit directly through the NCC. Our R199 fee is for the convenience of having it done correctly and quickly without navigating the process yourself.</div>
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    Can I do this myself for free?
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-body">
+                    <div class="faq-a">Yes — you can submit directly through the NCC. Our R199 fee covers the convenience of having it done correctly and quickly without navigating the process yourself.</div>
+                </div>
             </div>
             <div class="faq-item">
-                <div class="faq-q">How long before calls stop?</div>
-                <div class="faq-a">Once registered with the NCC, telemarketers are legally required to stop calling you. This can take several weeks as companies update their systems at different rates.</div>
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    How long before calls stop?
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-body">
+                    <div class="faq-a">Once registered with the NCC, telemarketers are legally required to stop calling you. This can take several weeks as companies update their systems at different rates.</div>
+                </div>
             </div>
             <div class="faq-item">
-                <div class="faq-q">How is my personal information protected?</div>
-                <div class="faq-a">Your information is used only to complete the NCC registration. We comply with POPIA and do not sell or share your data with any third parties.</div>
+                <div class="faq-q" onclick="toggleFaq(this)">
+                    How is my personal information protected?
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-body">
+                    <div class="faq-a">Your information is used only to complete the NCC registration. We comply with POPIA and do not sell or share your data with any third parties, ever.</div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ── FOOTER ─────────────────────────────────────── -->
+<!-- FOOTER -->
 <footer>
     <div class="wrap">
-        <div class="footer-logo">🛡️ StopTelemarketing</div>
-        <div class="footer-links">
-            <a href="#order">Get Started</a>
-            <a href="#faq">FAQ</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
+        <div class="footer-inner">
+            <div>
+                <div class="footer-logo">
+                    <span class="logo-icon">🛡️</span>
+                    StopTelemarketing
+                </div>
+                <p class="footer-desc">Helping South Africans stop unwanted telemarketing calls through the official NCC opt-out process.</p>
+            </div>
+            <div>
+                <div class="footer-col-title">Quick Links</div>
+                <div class="footer-col-links">
+                    <a href="#order">Get Started</a>
+                    <a href="#how">How It Works</a>
+                    <a href="#why">Why Us</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-col-title">Legal</div>
+                <div class="footer-col-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">POPIA Compliance</a>
+                </div>
+            </div>
         </div>
-        <p class="footer-copy">© 2025 StopTelemarketing.co.za · Helping South Africans stop unwanted calls</p>
+        <div class="footer-bottom">
+            <p class="footer-copy">© 2025 StopTelemarketing.co.za · All rights reserved</p>
+            <div class="footer-badges">
+                <span class="footer-badge">🔒 POPIA Compliant</span>
+                <span class="footer-badge">🛡️ NCC Process</span>
+                <span class="footer-badge">💳 PayFast Secured</span>
+            </div>
+        </div>
     </div>
 </footer>
 
-<!-- ── MOBILE STICKY BAR ──────────────────────────── -->
+<!-- MOBILE STICKY -->
 <div class="sticky-mobile">
     <a href="#order">Stop Spam Calls — R199 →</a>
 </div>
 
-<!-- ── PAYFAST FORM (hidden) ──────────────────────── -->
+<!-- PAYFAST FORM (hidden) -->
 <form id="payfastForm" action="https://www.payfast.co.za/eng/process" method="POST" style="display:none;">
-    <input type="hidden" name="merchant_id"  id="merchant_id"  value="31907641">
-    <input type="hidden" name="merchant_key" id="merchant_key" value="omutyofcmqnez">
-    <input type="hidden" name="return_url"   id="return_url"   value="https://stoptelemarketing.co.za/success.html">
-    <input type="hidden" name="cancel_url"   id="cancel_url"   value="https://stoptelemarketing.co.za">
-    <input type="hidden" name="notify_url"   id="notify_url"   value="https://stoptelemarketing.co.za/.netlify/functions/payfast-notify">
-    <input type="hidden" name="name_first"   id="name_first">
-    <input type="hidden" name="email_address" id="email_address">
-    <input type="hidden" name="cell_number"  id="cell_number">
-    <input type="hidden" name="amount"       id="amount"       value="199.00">
-    <input type="hidden" name="item_name"    id="item_name"    value="Telemarketing Opt-Out Service">
-    <input type="hidden" name="item_description" id="item_description" value="NCC Telemarketing Opt-Out Registration">
-    <input type="hidden" name="custom_str1"  id="custom_str1">
-    <input type="hidden" name="custom_str2"  id="custom_str2">
-    <input type="hidden" name="custom_str3"  id="custom_str3">
+    <input type="hidden" name="merchant_id"      id="merchant_id"      value="31907641">
+    <input type="hidden" name="merchant_key"     id="merchant_key"     value="omutyofcmqnez">
+    <input type="hidden" name="return_url"        id="return_url"       value="https://stoptelemarketing.co.za/success.html">
+    <input type="hidden" name="cancel_url"        id="cancel_url"       value="https://stoptelemarketing.co.za">
+    <input type="hidden" name="notify_url"        id="notify_url"       value="https://stoptelemarketing.co.za/.netlify/functions/payfast-notify">
+    <input type="hidden" name="name_first"        id="name_first">
+    <input type="hidden" name="email_address"     id="email_address">
+    <input type="hidden" name="cell_number"       id="cell_number">
+    <input type="hidden" name="amount"            id="amount"           value="199.00">
+    <input type="hidden" name="item_name"         id="item_name"        value="Telemarketing Opt-Out Service">
+    <input type="hidden" name="item_description"  id="item_description" value="NCC Telemarketing Opt-Out Registration">
+    <input type="hidden" name="custom_str1"       id="custom_str1">
+    <input type="hidden" name="custom_str2"       id="custom_str2">
+    <input type="hidden" name="custom_str3"       id="custom_str3">
 </form>
 
 <script>
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwORfij2K3QtbX5Ns7O2jYwkbrEQfm1RxlVDldTXzfdkRwfgiQvmUwLpirM_EUq_WQn6A/exec';
     let uploadedFileBase64 = null;
     let uploadedFileName   = null;
+
+    function setProgress(step) {
+        for (let i = 1; i <= 4; i++) {
+            const el = document.getElementById('prog-' + i);
+            el.classList.remove('active', 'done');
+            if (i < step)  el.classList.add('done');
+            if (i === step) el.classList.add('active');
+        }
+    }
 
     function showAlert(message, type = 'success') {
         const container = document.getElementById('alertContainer');
@@ -731,6 +1292,7 @@
         }
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.remove('hidden');
+        setProgress(2);
     }
 
     async function sendVerificationCode() {
@@ -757,6 +1319,7 @@
                 showAlert('Verification code sent! Check your email.', 'success');
                 document.getElementById('step2').classList.add('hidden');
                 document.getElementById('step3').classList.remove('hidden');
+                setProgress(3);
             } else {
                 showAlert(data.error || 'Failed to send code', 'error');
             }
@@ -784,6 +1347,7 @@
                 showAlert('Email verified!', 'success');
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('step4').classList.remove('hidden');
+                setProgress(4);
             } else {
                 showAlert(data.error || 'Invalid code', 'error');
             }
@@ -802,9 +1366,9 @@
         reader.onload = function(e) {
             uploadedFileBase64 = e.target.result.split(',')[1];
             uploadedFileName   = file.name;
-            document.getElementById('fileName').textContent   = file.name;
+            document.getElementById('fileName').textContent = file.name;
             document.getElementById('fileSelected').classList.remove('hidden');
-            document.getElementById('proceedBtn').disabled    = false;
+            document.getElementById('proceedBtn').disabled  = false;
             showAlert('ID document uploaded successfully', 'success');
         };
         reader.readAsDataURL(file);
@@ -870,7 +1434,13 @@
         form.submit();
     }
 
-    // Smooth scroll
+    function toggleFaq(el) {
+        const item = el.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+    }
+
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', function(e) {
             e.preventDefault();
