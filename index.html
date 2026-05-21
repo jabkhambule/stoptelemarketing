@@ -548,6 +548,34 @@
         .spinner.dark { border-color: rgba(0,0,0,.15); border-top-color: var(--green); }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+
+        /* ── AUTH UI ── */
+        .auth-tabs { display:flex; border-bottom:2px solid var(--border); margin:0 -36px 28px; padding:0 36px; }
+        .auth-tab { flex:1; padding:15px 12px; font-size:15px; font-weight:600; color:var(--text-mid); background:transparent; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; border-radius:0; cursor:pointer; transition:color .2s, border-color .2s; min-height:52px; }
+        .auth-tab:hover:not(:disabled) { background:transparent; color:var(--text); transform:none; box-shadow:none; }
+        .auth-tab.active { color:var(--green); border-bottom-color:var(--green); }
+        .pw-wrap { position:relative; }
+        .pw-wrap input { padding-right:48px; }
+        .pw-toggle { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:transparent; border:none; padding:6px; cursor:pointer; color:var(--text-soft); min-height:0; line-height:1; }
+        .pw-toggle:hover:not(:disabled) { color:var(--text); background:transparent; transform:translateY(-50%); box-shadow:none; }
+        .pw-toggle svg { width:18px; height:18px; display:block; }
+        .link-btn { background:transparent; border:none; color:var(--green); font-weight:600; cursor:pointer; padding:0; font-size:inherit; min-height:0; display:inline; }
+        .link-btn:hover:not(:disabled) { color:var(--green-dark); background:transparent; transform:none; }
+        .btn-outline { width:100%; justify-content:center; background:transparent; border:1.5px solid var(--border-mid); color:var(--text); padding:14px; font-size:15px; font-weight:600; border-radius:var(--radius-sm); }
+        .btn-outline:hover:not(:disabled) { background:var(--bg-light); transform:none; }
+        .user-header { display:flex; align-items:center; gap:14px; padding:16px 36px; background:var(--green-light); border-bottom:1px solid #bbf7d0; flex-wrap:wrap; }
+        .user-avatar { width:40px; height:40px; background:var(--green); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; flex-shrink:0; }
+        .user-info { min-width:0; flex:1; }
+        .user-name { font-size:15px; font-weight:700; color:var(--navy); }
+        .user-email-lbl { font-size:12px; color:var(--text-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .logout-btn { margin-left:auto; background:transparent; border:1.5px solid var(--border-mid); color:var(--text-mid); font-size:13px; padding:8px 14px; font-weight:600; border-radius:var(--radius-sm); white-space:nowrap; }
+        .logout-btn:hover:not(:disabled) { background:#fff; color:var(--red); border-color:var(--red); transform:none; }
+        .name-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px; }
+        .name-grid .form-group { margin-bottom:0; }
+        .field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px; }
+        .field-row .form-group { margin-bottom:0; }
+        @media(max-width:480px) { .name-grid, .field-row { grid-template-columns:1fr; } }
+
         /* ── FOOTER ── */
         footer {
             background: var(--navy); color: #94a3b8;
@@ -917,10 +945,10 @@
 <!-- ── ORDER FORM ── -->
 <section id="order" class="order-section">
     <div class="wrap-sm">
-        <div class="section-label">Register Now</div>
-        <h2>Complete Your Registration</h2>
+        <div class="section-label">Get Started</div>
+        <h2>Create Your Account</h2>
         <div class="section-divider"></div>
-        <p style="text-align:center;color:var(--text-mid);margin-bottom:32px;font-size:16px;">Secure form · Takes 2 minutes · Once-off R199 payment</p>
+        <p style="text-align:center;color:var(--text-mid);margin-bottom:32px;font-size:16px;">Your personal info and ID document stay behind a verified, secure login</p>
 
         <div class="form-card">
             <div class="form-card-header">
@@ -928,173 +956,249 @@
                     <svg style="display:inline;width:18px;height:18px;vertical-align:-3px;margin-right:6px;" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     Stop Telemarketing Calls
                 </h3>
-                <p>Fill in your details below to get started. Your information is handled securely.</p>
+                <p>Create a free account first — your sensitive details stay protected behind a verified login.</p>
             </div>
 
-            <div class="form-progress" id="formProgress">
-                <div class="progress-step active" id="prog-1">
-                    <div class="progress-dot">1</div>
-                    <div class="progress-label">Personal</div>
-                </div>
-                <div class="progress-step" id="prog-2">
-                    <div class="progress-dot">2</div>
-                    <div class="progress-label">Contact</div>
-                </div>
-                <div class="progress-step" id="prog-3">
-                    <div class="progress-dot">3</div>
-                    <div class="progress-label">Verify</div>
-                </div>
-                <div class="progress-step" id="prog-4">
-                    <div class="progress-dot">4</div>
-                    <div class="progress-label">Upload</div>
-                </div>
-            </div>
+            <div id="alertContainer" style="padding:0 36px;"></div>
 
-            <div class="form-card-body">
-                <div class="privacy-note">
-                    <strong>Your privacy matters:</strong> Your information is used only to submit your opt-out request and handled confidentially in line with POPIA.
+            <!-- STATE: AUTH -->
+            <div id="state-auth" class="form-card-body">
+                <div class="auth-tabs">
+                    <button type="button" class="auth-tab active" id="tab-register" onclick="switchTab('register')">Create Account</button>
+                    <button type="button" class="auth-tab" id="tab-login" onclick="switchTab('login')">Sign In</button>
                 </div>
 
-                <div id="alertContainer"></div>
-
-                <!-- Step 1 -->
-                <div class="form-step" id="step1">
-                    <div class="step-header">
-                        <span class="step-number">1</span>
-                        <span class="step-title">Your Personal Details</span>
+                <!-- Register -->
+                <div id="panel-register">
+                    <div class="privacy-note">
+                        <strong>Why create an account?</strong> Uploading your ID through an open form is risky. We protect your documents and personal info behind a verified login — only you can access them.
+                    </div>
+                    <div class="name-grid">
+                        <div class="form-group">
+                            <label for="reg-firstName">First Name <span style="color:#dc2626">*</span></label>
+                            <input type="text" id="reg-firstName" required placeholder="Lerato" autocomplete="given-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-lastName">Last Name <span style="color:#dc2626">*</span></label>
+                            <input type="text" id="reg-lastName" required placeholder="Mokoena" autocomplete="family-name">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstName">First Name <span style="color:#dc2626">*</span></label>
-                        <input type="text" id="firstName" required placeholder="John" autocomplete="given-name">
+                        <label for="reg-email">Email Address <span style="color:#dc2626">*</span></label>
+                        <input type="email" id="reg-email" required placeholder="lerato@example.com" autocomplete="email">
                     </div>
                     <div class="form-group">
-                        <label for="surname">Surname <span style="color:#dc2626">*</span></label>
-                        <input type="text" id="surname" required placeholder="Smith" autocomplete="family-name">
-                    </div>
-                    <div class="form-group">
-                        <label for="idType">ID Type <span style="color:#dc2626">*</span></label>
-                        <select id="idType" required>
-                            <option value="">Select ID Type</option>
-                            <option value="RSA ID">South African ID</option>
-                            <option value="Passport">Passport</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="idNumber">ID / Passport Number <span style="color:#dc2626">*</span></label>
-                        <input type="text" id="idNumber" required placeholder="8001015009087" inputmode="numeric">
-                        <p class="input-hint">13-digit SA ID number or passport number</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="gender">Gender <span style="color:#dc2626">*</span></label>
-                        <select id="gender" required>
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="maritalStatus">Marital Status <span style="color:#dc2626">*</span></label>
-                        <select id="maritalStatus" required>
-                            <option value="">Select Status</option>
-                            <option value="Single">Single</option>
-                            <option value="Married">Married</option>
-                            <option value="Divorced">Divorced</option>
-                            <option value="Widowed">Widowed</option>
-                        </select>
-                    </div>
-                    <button onclick="validateStep1()" id="step1Btn" type="button" class="btn-form-primary">
-                        <span id="step1Text">Continue to Contact Details</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </button>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="form-step hidden" id="step2">
-                    <div class="step-header">
-                        <span class="step-number">2</span>
-                        <span class="step-title">Your Contact Details</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address <span style="color:#dc2626">*</span></label>
-                        <input type="email" id="email" required placeholder="john@example.com" autocomplete="email">
-                        <p class="input-hint">We'll send a verification code here</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Mobile Phone <span style="color:#dc2626">*</span></label>
-                        <input type="tel" id="phone" required placeholder="0821234567" autocomplete="tel">
-                        <p class="input-hint">This number will be registered for opt-out</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="workPhone">Work Phone <span style="color:var(--text-soft);font-weight:400;">(optional)</span></label>
-                        <input type="tel" id="workPhone" placeholder="0115551234" autocomplete="tel-work">
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Physical Address <span style="color:#dc2626">*</span></label>
-                        <textarea id="address" required placeholder="123 Main Street, Johannesburg, 2000" autocomplete="street-address"></textarea>
-                        <p class="input-hint">Full address as required by NCC</p>
-                    </div>
-                    <button onclick="sendVerificationCode()" id="sendCodeBtn" type="button" class="btn-form-primary">
-                        <span id="sendCodeText">Send Verification Code</span>
-                        <span id="sendCodeSpinner" class="spinner hidden"></span>
-                    </button>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="form-step hidden" id="step3">
-                    <div class="step-header">
-                        <span class="step-number">3</span>
-                        <span class="step-title">Verify Your Email</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="verificationCode">Verification Code <span style="color:#dc2626">*</span></label>
-                        <div class="verify-section">
-                            <input type="text" id="verificationCode" placeholder="Enter 6-digit code" maxlength="6" inputmode="numeric">
-                            <button onclick="verifyCode()" id="verifyBtn" type="button">
-                                <span id="verifyText">Verify</span>
-                                <span id="verifySpinner" class="spinner dark hidden"></span>
+                        <label for="reg-password">Password <span style="color:#dc2626">*</span></label>
+                        <div class="pw-wrap">
+                            <input type="password" id="reg-password" required placeholder="At least 8 characters" autocomplete="new-password">
+                            <button type="button" class="pw-toggle" onclick="togglePw('reg-password',this)" aria-label="Show password">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </button>
                         </div>
-                        <p class="input-hint">Check your inbox for the verification code</p>
-                    </div>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="form-step hidden" id="step4">
-                    <div class="step-header">
-                        <span class="step-number">4</span>
-                        <span class="step-title">Upload ID Document</span>
+                        <p class="input-hint">Minimum 8 characters</p>
                     </div>
                     <div class="form-group">
-                        <label>ID Document or Passport <span style="color:#dc2626">*</span></label>
-                        <div class="file-upload" onclick="document.getElementById('idDocument').click()">
-                            <input type="file" id="idDocument" accept="image/*,.pdf" onchange="handleFileSelect(this)">
-                            <div class="upload-icon">
-                                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 26V14M14 20l6-6 6 6"/><rect x="6" y="6" width="28" height="28" rx="4"/></svg>
-                            </div>
-                            <div class="upload-text">Click to upload your ID</div>
-                            <div class="upload-hint">JPG, PNG or PDF · Max 5MB</div>
+                        <label for="reg-confirm">Confirm Password <span style="color:#dc2626">*</span></label>
+                        <div class="pw-wrap">
+                            <input type="password" id="reg-confirm" required placeholder="Repeat password" autocomplete="new-password">
+                            <button type="button" class="pw-toggle" onclick="togglePw('reg-confirm',this)" aria-label="Show password">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
                         </div>
-                        <div id="fileSelected" class="file-selected hidden">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-                            <span id="fileName"></span>
-                        </div>
-                        <p style="font-size:13px;color:var(--text-mid);margin-top:12px;line-height:1.5;">
-                            Documents are securely stored and not shared with third parties.
-                        </p>
                     </div>
-                    <button onclick="proceedToPayment()" id="proceedBtn" class="proceed-button" disabled type="button">
-                        <span id="proceedText">Pay R199 Securely</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        <span id="proceedSpinner" class="spinner hidden"></span>
+                    <button type="button" class="btn-form-primary" id="reg-btn" onclick="doRegister()">
+                        <span id="reg-text">Create Account</span>
+                        <span id="reg-spinner" class="spinner hidden"></span>
                     </button>
-                    <p style="text-align:center;font-size:13px;color:var(--text-soft);margin-top:10px;">Once-off · No subscription · Secure via PayFast</p>
+                    <p style="text-align:center;font-size:13px;color:var(--text-soft);margin-top:16px;">Already have an account? <button type="button" class="link-btn" onclick="switchTab('login')">Sign in &#8594;</button></p>
                 </div>
 
-                <div class="legal-note">
-                    <strong>Important:</strong> We are not affiliated with the NCC but use their official opt-out system on your behalf. Your information is handled in strict compliance with POPIA.
+                <!-- Login -->
+                <div id="panel-login" class="hidden">
+                    <div class="privacy-note">
+                        <strong>Welcome back.</strong> Sign in with your verified account to continue your registration securely.
+                    </div>
+                    <div class="form-group">
+                        <label for="login-email">Email Address <span style="color:#dc2626">*</span></label>
+                        <input type="email" id="login-email" required placeholder="lerato@example.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password <span style="color:#dc2626">*</span></label>
+                        <div class="pw-wrap">
+                            <input type="password" id="login-password" required placeholder="Your password" autocomplete="current-password">
+                            <button type="button" class="pw-toggle" onclick="togglePw('login-password',this)" aria-label="Show password">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-form-primary" id="login-btn" onclick="doLogin()">
+                        <span id="login-text">Sign In</span>
+                        <span id="login-spinner" class="spinner hidden"></span>
+                    </button>
+                    <p style="text-align:center;font-size:13px;color:var(--text-soft);margin-top:16px;">New here? <button type="button" class="link-btn" onclick="switchTab('register')">Create a free account &#8594;</button></p>
                 </div>
             </div>
+
+            <!-- STATE: CHECK EMAIL -->
+            <div id="state-check-email" class="form-card-body hidden">
+                <div style="text-align:center;padding:16px 0 24px;">
+                    <div style="width:72px;height:72px;background:var(--green-mid);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+                    </div>
+                    <h3 style="font-size:20px;font-weight:800;color:var(--navy);margin-bottom:10px;">Check your inbox</h3>
+                    <p style="font-size:15px;color:var(--text-mid);line-height:1.7;max-width:360px;margin:0 auto 24px;">We sent a verification link to <strong id="check-email-addr" style="color:var(--navy);word-break:break-all;"></strong>. Click it to activate your account.</p>
+                    <div class="privacy-note" style="text-align:left;margin-bottom:24px;">
+                        <strong>After verifying:</strong> Return here and click &#8220;Already verified? Sign In&#8221; to continue.
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <button type="button" class="btn-form-primary" onclick="showAuthState('login')">
+                            Already verified? Sign In
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                        <button type="button" class="btn-outline" id="resend-btn" onclick="doResend()">
+                            <span id="resend-text">Resend verification email</span>
+                            <span id="resend-spinner" class="spinner dark hidden"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATE: PROTECTED -->
+            <div id="state-protected" class="hidden">
+                <div class="user-header">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <div class="user-info">
+                        <div class="user-name" id="user-name-display">Your Name</div>
+                        <div class="user-email-lbl" id="user-email-display">email@example.com</div>
+                    </div>
+                    <button type="button" class="logout-btn" onclick="doLogout()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;vertical-align:-2px;margin-right:5px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                        Sign out
+                    </button>
+                </div>
+
+                <div class="form-progress" id="formProgress">
+                    <div class="progress-step active" id="prog-1">
+                        <div class="progress-dot">1</div>
+                        <div class="progress-label">Your Details</div>
+                    </div>
+                    <div class="progress-step" id="prog-2">
+                        <div class="progress-dot">2</div>
+                        <div class="progress-label">ID Upload</div>
+                    </div>
+                </div>
+
+                <div class="form-card-body">
+                    <div id="prot-alertContainer"></div>
+
+                    <!-- Protected Step 1 -->
+                    <div class="form-step" id="prot-step1">
+                        <div class="step-header">
+                            <span class="step-number">1</span>
+                            <span class="step-title">Your Personal Details</span>
+                        </div>
+                        <div class="name-grid">
+                            <div class="form-group">
+                                <label for="firstName">First Name <span style="color:#dc2626">*</span></label>
+                                <input type="text" id="firstName" required placeholder="Lerato" autocomplete="given-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="surname">Last Name <span style="color:#dc2626">*</span></label>
+                                <input type="text" id="surname" required placeholder="Mokoena" autocomplete="family-name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="idType">ID Type <span style="color:#dc2626">*</span></label>
+                            <select id="idType" required>
+                                <option value="">Select ID Type</option>
+                                <option value="RSA ID">South African ID</option>
+                                <option value="Passport">Passport</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="idNumber">ID / Passport Number <span style="color:#dc2626">*</span></label>
+                            <input type="text" id="idNumber" required placeholder="8001015009087" inputmode="numeric">
+                            <p class="input-hint">13-digit SA ID number or passport number</p>
+                        </div>
+                        <div class="field-row">
+                            <div class="form-group">
+                                <label for="gender">Gender <span style="color:#dc2626">*</span></label>
+                                <select id="gender" required>
+                                    <option value="">Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="maritalStatus">Marital Status <span style="color:#dc2626">*</span></label>
+                                <select id="maritalStatus" required>
+                                    <option value="">Select</option>
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
+                                    <option value="Divorced">Divorced</option>
+                                    <option value="Widowed">Widowed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Mobile Phone <span style="color:#dc2626">*</span></label>
+                            <input type="tel" id="phone" required placeholder="0821234567" autocomplete="tel">
+                            <p class="input-hint">This number will be registered for opt-out</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="workPhone">Work Phone <span style="color:var(--text-soft);font-weight:400;">(optional)</span></label>
+                            <input type="tel" id="workPhone" placeholder="0115551234" autocomplete="tel">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Physical Address <span style="color:#dc2626">*</span></label>
+                            <textarea id="address" required placeholder="123 Main Street, Johannesburg, 2000" autocomplete="street-address"></textarea>
+                            <p class="input-hint">Full address as required by NCC</p>
+                        </div>
+                        <button type="button" id="step1Btn" class="btn-form-primary" onclick="validateProtectedStep1()">
+                            <span id="step1Text">Continue to ID Upload</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Protected Step 2 -->
+                    <div class="form-step hidden" id="prot-step2">
+                        <div class="step-header">
+                            <span class="step-number">2</span>
+                            <span class="step-title">Upload Your ID Document</span>
+                        </div>
+                        <div class="privacy-note" style="margin-bottom:24px;">
+                            <strong>Why we need this:</strong> The NCC requires a copy of your ID to process the opt-out. Because you are signed in, your document is encrypted and stored securely &#8212; never accessible without your login.
+                        </div>
+                        <div class="form-group">
+                            <label>ID Document or Passport <span style="color:#dc2626">*</span></label>
+                            <div class="file-upload" onclick="document.getElementById('idDocument').click()">
+                                <input type="file" id="idDocument" accept="image/*,.pdf" onchange="handleFileSelect(this)">
+                                <div class="upload-icon">
+                                    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 26V14M14 20l6-6 6 6"/><rect x="6" y="6" width="28" height="28" rx="4"/></svg>
+                                </div>
+                                <div class="upload-text">Click to upload your ID</div>
+                                <div class="upload-hint">JPG, PNG or PDF &#183; Max 5MB</div>
+                            </div>
+                            <div id="fileSelected" class="file-selected hidden">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                                <span id="fileName"></span>
+                            </div>
+                        </div>
+                        <button onclick="proceedToPayment()" id="proceedBtn" class="proceed-button" disabled type="button">
+                            <span id="proceedText">Pay R199 Securely</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <span id="proceedSpinner" class="spinner hidden"></span>
+                        </button>
+                        <p style="text-align:center;font-size:13px;color:var(--text-soft);margin-top:10px;">Once-off &#183; No subscription &#183; Secure via PayFast</p>
+                    </div>
+
+                    <div class="legal-note">
+                        <strong>Important:</strong> We are not affiliated with the NCC but use their official opt-out system on your behalf. Your information is handled in strict compliance with POPIA.
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -1229,179 +1333,331 @@
 
 <script>
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwORfij2K3QtbX5Ns7O2jYwkbrEQfm1RxlVDldTXzfdkRwfgiQvmUwLpirM_EUq_WQn6A/exec';
+
+    /* ─── GOOGLE APPS SCRIPT ACTIONS NEEDED ───────────────────────────────────
+       · register          → params: email, pwHash, firstName, lastName
+                             creates account, sends ?verify=TOKEN link by email
+                             returns {result:'success'} or {error:'...'}
+       · login             → params: email, pwHash
+                             returns {result:'success', token, firstName, verified:bool}
+       · verifyEmail       → params: token
+                             marks account verified, returns {result:'success', email}
+       · checkSession      → params: token
+                             returns {valid:true, email, firstName} or {valid:false}
+       · resendVerification → params: email  →  resends verification email
+       · submitDetails     → POST: sessionToken + personal fields + idDocumentBase64
+    ─────────────────────────────────────────────────────────────────────────── */
+
+    // Session helpers
+    const SESSION_KEY  = 'st_auth_v1';
+    const getSession   = () => { try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch { return null; } };
+    const setSession   = d  => localStorage.setItem(SESSION_KEY, JSON.stringify(d));
+    const clearSession = () => localStorage.removeItem(SESSION_KEY);
+
     let uploadedFileBase64 = null;
     let uploadedFileName   = null;
 
+    // SHA-256 password hash via SubtleCrypto
+    async function hashPassword(password) {
+        const enc = new TextEncoder();
+        const buf = await crypto.subtle.digest('SHA-256', enc.encode(password + 'st_v1_salt'));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    // Alert helpers
+    function showAlert(msg, type) {
+        type = type || 'success';
+        var c = document.getElementById('alertContainer');
+        var el = document.createElement('div');
+        el.className = 'alert alert-' + type;
+        el.style.margin = '16px 0 0';
+        el.innerHTML = '<span class="alert-icon">' + (type === 'success' ? '&#10003;' : '!') + '</span><span>' + msg + '</span>';
+        c.innerHTML = ''; c.appendChild(el);
+        setTimeout(function(){ el.remove(); }, 6000);
+    }
+
+    function showProtAlert(msg, type) {
+        type = type || 'success';
+        var c = document.getElementById('prot-alertContainer');
+        var el = document.createElement('div');
+        el.className = 'alert alert-' + type;
+        el.innerHTML = '<span class="alert-icon">' + (type === 'success' ? '&#10003;' : '!') + '</span><span>' + msg + '</span>';
+        c.innerHTML = ''; c.appendChild(el);
+        setTimeout(function(){ el.remove(); }, 6000);
+    }
+
+    function setLoading(textId, spinnerId, btnId, loading) {
+        var text = document.getElementById(textId);
+        var spinner = document.getElementById(spinnerId);
+        var btn = document.getElementById(btnId);
+        if (loading) { btn.disabled = true; text.classList.add('hidden'); spinner.classList.remove('hidden'); }
+        else { btn.disabled = false; text.classList.remove('hidden'); spinner.classList.add('hidden'); }
+    }
+
+    function togglePw(inputId, btn) {
+        var input = document.getElementById(inputId);
+        var show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    }
+
+    // State transitions
+    function showAuthState(tab) {
+        document.getElementById('state-auth').classList.remove('hidden');
+        document.getElementById('state-check-email').classList.add('hidden');
+        document.getElementById('state-protected').classList.add('hidden');
+        switchTab(tab || 'register');
+    }
+
+    function switchTab(tab) {
+        var isReg = tab === 'register';
+        document.getElementById('panel-register').classList.toggle('hidden', !isReg);
+        document.getElementById('panel-login').classList.toggle('hidden', isReg);
+        document.getElementById('tab-register').classList.toggle('active', isReg);
+        document.getElementById('tab-login').classList.toggle('active', !isReg);
+    }
+
+    function showProtectedState(firstName, email) {
+        document.getElementById('state-auth').classList.add('hidden');
+        document.getElementById('state-check-email').classList.add('hidden');
+        document.getElementById('state-protected').classList.remove('hidden');
+        document.getElementById('user-name-display').textContent = firstName;
+        document.getElementById('user-email-display').textContent = email;
+        document.getElementById('user-avatar').textContent = firstName.charAt(0).toUpperCase();
+        var fn = document.getElementById('firstName');
+        if (fn && !fn.value) fn.value = firstName;
+        setProgress(1);
+    }
+
+    // Register
+    async function doRegister() {
+        var firstName = document.getElementById('reg-firstName').value.trim();
+        var lastName  = document.getElementById('reg-lastName').value.trim();
+        var email     = document.getElementById('reg-email').value.trim();
+        var password  = document.getElementById('reg-password').value;
+        var confirm   = document.getElementById('reg-confirm').value;
+        if (!firstName || !lastName || !email || !password) { showAlert('Please fill in all fields.', 'error'); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAlert('Please enter a valid email address.', 'error'); return; }
+        if (password.length < 8) { showAlert('Password must be at least 8 characters.', 'error'); return; }
+        if (password !== confirm) { showAlert('Passwords do not match.', 'error'); return; }
+        setLoading('reg-text','reg-spinner','reg-btn', true);
+        try {
+            var pwHash = await hashPassword(password);
+            var url = GOOGLE_SCRIPT_URL + '?action=register&email=' + encodeURIComponent(email) + '&pwHash=' + pwHash + '&firstName=' + encodeURIComponent(firstName) + '&lastName=' + encodeURIComponent(lastName);
+            var res = await fetch(url, { redirect: 'follow' });
+            var data = await res.json();
+            if (data.result === 'success') {
+                document.getElementById('check-email-addr').textContent = email;
+                document.getElementById('state-auth').classList.add('hidden');
+                document.getElementById('state-check-email').classList.remove('hidden');
+            } else { showAlert(data.error || 'Registration failed. Please try again.', 'error'); }
+        } catch(err) { showAlert('Connection error. Please try again.', 'error'); }
+        finally { setLoading('reg-text','reg-spinner','reg-btn', false); }
+    }
+
+    // Login
+    async function doLogin() {
+        var email    = document.getElementById('login-email').value.trim();
+        var password = document.getElementById('login-password').value;
+        if (!email || !password) { showAlert('Please enter your email and password.', 'error'); return; }
+        setLoading('login-text','login-spinner','login-btn', true);
+        try {
+            var pwHash = await hashPassword(password);
+            var url = GOOGLE_SCRIPT_URL + '?action=login&email=' + encodeURIComponent(email) + '&pwHash=' + pwHash;
+            var res = await fetch(url, { redirect: 'follow' });
+            var data = await res.json();
+            if (data.result === 'success') {
+                if (!data.verified) {
+                    document.getElementById('check-email-addr').textContent = email;
+                    document.getElementById('state-auth').classList.add('hidden');
+                    document.getElementById('state-check-email').classList.remove('hidden');
+                    showAlert('Please verify your email first — check your inbox.', 'error');
+                    return;
+                }
+                setSession({ email: email, token: data.token, firstName: data.firstName, verified: true });
+                showProtectedState(data.firstName, email);
+            } else { showAlert(data.error || 'Incorrect email or password.', 'error'); }
+        } catch(err) { showAlert('Connection error. Please try again.', 'error'); }
+        finally { setLoading('login-text','login-spinner','login-btn', false); }
+    }
+
+    // Logout
+    function doLogout() {
+        clearSession();
+        showAuthState('login');
+        showAlert('You have been signed out.', 'success');
+    }
+
+    // Resend verification email
+    async function doResend() {
+        var email = document.getElementById('check-email-addr').textContent.trim();
+        if (!email) return;
+        setLoading('resend-text','resend-spinner','resend-btn', true);
+        try {
+            var res = await fetch(GOOGLE_SCRIPT_URL + '?action=resendVerification&email=' + encodeURIComponent(email), { redirect: 'follow' });
+            var data = await res.json();
+            showAlert(data.result === 'success' ? 'Verification email resent! Check your inbox.' : (data.error || 'Failed to resend.'), data.result === 'success' ? 'success' : 'error');
+        } catch(err) { showAlert('Connection error.', 'error'); }
+        finally { setLoading('resend-text','resend-spinner','resend-btn', false); }
+    }
+
+    // Handle ?verify=TOKEN in URL
+    async function handleEmailVerification(token) {
+        showAlert('Verifying your email...', 'success');
+        try {
+            var res = await fetch(GOOGLE_SCRIPT_URL + '?action=verifyEmail&token=' + encodeURIComponent(token), { redirect: 'follow' });
+            var data = await res.json();
+            window.history.replaceState({}, document.title, window.location.pathname);
+            if (data.result === 'success') {
+                showAlert('Email verified! You can now sign in.', 'success');
+                showAuthState('login');
+                if (data.email) document.getElementById('login-email').value = data.email;
+            } else { showAlert(data.error || 'Verification failed. The link may have expired.', 'error'); }
+        } catch(err) { showAlert('Verification error. Please try again.', 'error'); }
+    }
+
+    // On load: check existing session or verify param
+    window.addEventListener('DOMContentLoaded', function() {
+        var params = new URLSearchParams(window.location.search);
+        var vt = params.get('verify');
+        if (vt) { handleEmailVerification(vt); return; }
+        var session = getSession();
+        if (session && session.token && session.verified) {
+            fetch(GOOGLE_SCRIPT_URL + '?action=checkSession&token=' + session.token, { redirect: 'follow' })
+                .then(function(r){ return r.json(); })
+                .then(function(data){
+                    if (data.valid) showProtectedState(session.firstName, session.email);
+                    else clearSession();
+                })
+                .catch(function(){ showProtectedState(session.firstName, session.email); });
+        }
+    });
+
+    // 2-step progress
     function setProgress(step) {
-        for (let i = 1; i <= 4; i++) {
-            const el = document.getElementById('prog-' + i);
-            el.classList.remove('active', 'done');
-            if (i < step)  el.classList.add('done');
+        for (var i = 1; i <= 2; i++) {
+            var el = document.getElementById('prog-' + i);
+            if (!el) continue;
+            el.classList.remove('active','done');
+            if (i < step) el.classList.add('done');
             if (i === step) el.classList.add('active');
         }
     }
 
-    function showAlert(message, type = 'success') {
-        const container = document.getElementById('alertContainer');
-        const el = document.createElement('div');
-        el.className = `alert alert-${type}`;
-        el.innerHTML = `<span class="alert-icon">${type === 'success' ? '✓' : '!'}</span><span>${message}</span>`;
-        container.innerHTML = '';
-        container.appendChild(el);
-        setTimeout(() => el.remove(), 5000);
-    }
-
-    function validateStep1() {
-        const firstName     = document.getElementById('firstName').value.trim();
-        const surname       = document.getElementById('surname').value.trim();
-        const idType        = document.getElementById('idType').value;
-        const idNumber      = document.getElementById('idNumber').value.trim();
-        const gender        = document.getElementById('gender').value;
-        const maritalStatus = document.getElementById('maritalStatus').value;
-        if (!firstName || !surname || !idType || !idNumber || !gender || !maritalStatus) {
-            showAlert('Please fill in all required fields', 'error'); return;
-        }
-        if (idType === 'RSA ID' && idNumber.length !== 13) {
-            showAlert('SA ID number must be 13 digits', 'error'); return;
+    // Validate protected step 1
+    function validateProtectedStep1() {
+        var firstName     = document.getElementById('firstName').value.trim();
+        var surname       = document.getElementById('surname').value.trim();
+        var idType        = document.getElementById('idType').value;
+        var idNumber      = document.getElementById('idNumber').value.trim();
+        var gender        = document.getElementById('gender').value;
+        var maritalStatus = document.getElementById('maritalStatus').value;
+        var phone         = document.getElementById('phone').value.trim();
+        var address       = document.getElementById('address').value.trim();
+        if (!firstName || !surname || !idType || !idNumber || !gender || !maritalStatus || !phone || !address) {
+            showProtAlert('Please fill in all required fields.', 'error'); return;
         }
         if (idType === 'RSA ID' && !/^\d{13}$/.test(idNumber)) {
-            showAlert('SA ID number must contain only numbers', 'error'); return;
+            showProtAlert('SA ID number must be exactly 13 digits.', 'error'); return;
         }
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
+        document.getElementById('prot-step1').classList.add('hidden');
+        document.getElementById('prot-step2').classList.remove('hidden');
         setProgress(2);
     }
 
-    async function sendVerificationCode() {
-        const email   = document.getElementById('email').value.trim();
-        const phone   = document.getElementById('phone').value.trim();
-        const address = document.getElementById('address').value.trim();
-        if (!email || !phone || !address) { showAlert('Please fill in all required fields', 'error'); return; }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAlert('Please enter a valid email address', 'error'); return; }
-        const btn = document.getElementById('sendCodeBtn');
-        const text = document.getElementById('sendCodeText');
-        const spinner = document.getElementById('sendCodeSpinner');
-        btn.disabled = true; text.classList.add('hidden'); spinner.classList.remove('hidden');
-        try {
-            const res  = await fetch(`${GOOGLE_SCRIPT_URL}?action=sendCode&email=${encodeURIComponent(email)}`, { method: 'GET', redirect: 'follow' });
-            const data = await res.json();
-            if (data.result === 'success') {
-                showAlert('Verification code sent! Check your email.', 'success');
-                document.getElementById('step2').classList.add('hidden');
-                document.getElementById('step3').classList.remove('hidden');
-                setProgress(3);
-            } else { showAlert(data.error || 'Failed to send code', 'error'); }
-        } catch (err) { showAlert(`Connection error: ${err.message}`, 'error'); }
-        finally { btn.disabled = false; text.classList.remove('hidden'); spinner.classList.add('hidden'); }
-    }
-
-    async function verifyCode() {
-        const email = document.getElementById('email').value.trim();
-        const code  = document.getElementById('verificationCode').value.trim();
-        if (!code || code.length !== 6) { showAlert('Please enter the 6-digit code', 'error'); return; }
-        const btn = document.getElementById('verifyBtn');
-        const text = document.getElementById('verifyText');
-        const spinner = document.getElementById('verifySpinner');
-        btn.disabled = true; text.classList.add('hidden'); spinner.classList.remove('hidden');
-        try {
-            const res  = await fetch(`${GOOGLE_SCRIPT_URL}?action=verifyCode&email=${encodeURIComponent(email)}&code=${code}`);
-            const data = await res.json();
-            if (data.result === 'success') {
-                showAlert('Email verified!', 'success');
-                document.getElementById('step3').classList.add('hidden');
-                document.getElementById('step4').classList.remove('hidden');
-                setProgress(4);
-            } else { showAlert(data.error || 'Invalid code', 'error'); }
-        } catch (err) { showAlert('Network error. Please try again.', 'error'); }
-        finally { btn.disabled = false; text.classList.remove('hidden'); spinner.classList.add('hidden'); }
-    }
-
+    // File upload
     function handleFileSelect(input) {
-        const file = input.files[0];
+        var file = input.files[0];
         if (!file) return;
-        if (file.size > 5 * 1024 * 1024) { showAlert('File must be under 5MB', 'error'); input.value = ''; return; }
-        const reader = new FileReader();
+        if (file.size > 5 * 1024 * 1024) { showProtAlert('File must be under 5MB.', 'error'); input.value = ''; return; }
+        var reader = new FileReader();
         reader.onload = function(e) {
             uploadedFileBase64 = e.target.result.split(',')[1];
             uploadedFileName   = file.name;
             document.getElementById('fileName').textContent = file.name;
             document.getElementById('fileSelected').classList.remove('hidden');
-            document.getElementById('proceedBtn').disabled  = false;
-            showAlert('ID document uploaded successfully', 'success');
+            document.getElementById('proceedBtn').disabled = false;
+            showProtAlert('ID document ready — click Pay to continue.', 'success');
         };
         reader.readAsDataURL(file);
     }
 
+    // Proceed to PayFast
     async function proceedToPayment() {
-        if (!uploadedFileBase64) { showAlert('Please upload your ID document', 'error'); return; }
-        const firstName = document.getElementById('firstName').value.trim();
-        const surname   = document.getElementById('surname').value.trim();
-        const idType    = document.getElementById('idType').value;
-        const idNumber  = document.getElementById('idNumber').value.trim();
-        const gender    = document.getElementById('gender').value;
-        const maritalStatus = document.getElementById('maritalStatus').value;
-        const email     = document.getElementById('email').value.trim();
-        const phone     = document.getElementById('phone').value.trim();
-        const workPhone = document.getElementById('workPhone').value.trim();
-        const address   = document.getElementById('address').value.trim();
-        const orderRef  = 'OPT' + Date.now();
+        if (!uploadedFileBase64) { showProtAlert('Please upload your ID document.', 'error'); return; }
+        var session       = getSession();
+        var firstName     = document.getElementById('firstName').value.trim();
+        var surname       = document.getElementById('surname').value.trim();
+        var idType        = document.getElementById('idType').value;
+        var idNumber      = document.getElementById('idNumber').value.trim();
+        var gender        = document.getElementById('gender').value;
+        var maritalStatus = document.getElementById('maritalStatus').value;
+        var email         = session ? session.email : '';
+        var phone         = document.getElementById('phone').value.trim();
+        var workPhone     = document.getElementById('workPhone').value.trim();
+        var address       = document.getElementById('address').value.trim();
+        var orderRef      = 'OPT' + Date.now();
 
-        const uploadData = {
-            orderRef, timestamp: new Date().toISOString(),
-            firstName, surname, idType, idNumber, gender, maritalStatus,
-            email, phone, workPhone: workPhone || '', address,
+        var uploadData = {
+            orderRef: orderRef, timestamp: new Date().toISOString(),
+            sessionToken: session ? session.token : '',
+            firstName: firstName, surname: surname, idType: idType, idNumber: idNumber,
+            gender: gender, maritalStatus: maritalStatus, email: email,
+            phone: phone, workPhone: workPhone || '', address: address,
             idDocumentBase64: uploadedFileBase64,
             idDocumentType: uploadedFileName.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg'
         };
 
-        const iframe = document.createElement('iframe');
+        var iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         iframe.name = 'uploadFrame_' + Date.now();
         document.body.appendChild(iframe);
 
-        const form = document.createElement('form');
+        var form = document.createElement('form');
         form.target = iframe.name; form.method = 'POST'; form.action = GOOGLE_SCRIPT_URL;
-        Object.keys(uploadData).forEach(key => {
-            const inp = document.createElement('input');
+        Object.keys(uploadData).forEach(function(key) {
+            var inp = document.createElement('input');
             inp.type = 'hidden'; inp.name = key; inp.value = uploadData[key];
             form.appendChild(inp);
         });
         document.body.appendChild(form);
 
-        const preparePayFast = () => {
+        var preparePayFast = function() {
             document.getElementById('name_first').value    = firstName;
             document.getElementById('email_address').value = email;
             document.getElementById('cell_number').value   = phone.replace(/\D/g, '');
             document.getElementById('custom_str1').value   = orderRef;
             document.getElementById('custom_str2').value   = email;
             document.getElementById('custom_str3').value   = phone;
-            showAlert('Redirecting to secure payment…', 'success');
-            setTimeout(() => document.getElementById('payfastForm').submit(), 1500);
+            showProtAlert('Redirecting to secure payment...', 'success');
+            setTimeout(function(){ document.getElementById('payfastForm').submit(); }, 1500);
         };
 
-        let done = false;
+        var done = false;
         iframe.onload = function() {
             if (!done) {
                 done = true;
-                setTimeout(() => { try { document.body.removeChild(form); document.body.removeChild(iframe); } catch(e){} }, 100);
+                setTimeout(function(){ try { document.body.removeChild(form); document.body.removeChild(iframe); } catch(e){} }, 100);
                 preparePayFast();
             }
         };
-        setTimeout(() => { if (!done) { done = true; preparePayFast(); } }, 5000);
+        setTimeout(function(){ if (!done) { done = true; preparePayFast(); } }, 5000);
         form.submit();
     }
 
+    // FAQ
     function toggleFaq(el) {
-        const item = el.parentElement;
-        const isOpen = item.classList.contains('open');
-        document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+        var item = el.parentElement;
+        var isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(function(i){ i.classList.remove('open'); });
         if (!isOpen) item.classList.add('open');
     }
 
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(function(a) {
         a.addEventListener('click', function(e) {
             e.preventDefault();
-            const t = document.querySelector(this.getAttribute('href'));
+            var t = document.querySelector(this.getAttribute('href'));
             if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
