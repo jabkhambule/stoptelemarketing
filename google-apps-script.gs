@@ -1,63 +1,82 @@
 // ============================================================
-//  StopTelemarketing — Google Apps Script Backend
-//  Version: 2.0 (auth-gated flow)
+//  StopTelemarketing — Google Apps Script Backend v2.1
 // ============================================================
-//
-//  SETUP STEPS:
-//  1. Open your Google Sheet
-//  2. Extensions → Apps Script → paste this entire file
-//  3. Run initSheets() once (creates the required tabs)
-//  4. Set DRIVE_FOLDER_ID below to a Google Drive folder ID
-//     (create a folder, right-click → Get link → copy the ID from the URL)
-//  5. Deploy → New deployment → Web App
-//     Execute as: Me | Who has access: Anyone
-//  6. Copy the deployment URL into your index.html GOOGLE_SCRIPT_URL
-//
+//  Run setup() once from the Apps Script editor to initialise
+//  sheets, Drive folder, and CRM email triggers.
 // ============================================================
 
-// ── CONFIG ────────────────────────────────────────────────────────────────────
+var SPREADSHEET_ID = '1hiXDRxc8VOv3wEnHv3bctTc-9mNoXpbZAUJxGRtOjqw';
+var SITE_URL       = 'https://stoptelemarketing.co.za';
+var FROM_NAME      = 'StopTelemarketing';
+var SUPPORT_EMAIL  = 'stoptelemaketing@gmail.com';
+var SESSION_TTL_MS = 7  * 24 * 60 * 60 * 1000;  // 7 days
+var VERIFY_TTL_MS  = 24 * 60 * 60 * 1000;         // 24 hours
 
-var DRIVE_FOLDER_ID = '';                          // Paste your Drive folder ID here
-var SITE_URL        = 'https://stoptelemarketing.co.za';
-var FROM_NAME       = 'StopTelemarketing';
-var SUPPORT_EMAIL   = 'support@stoptelemarketing.co.za'; // shown in emails
-var SESSION_TTL_MS  = 7  * 24 * 60 * 60 * 1000;  // 7 days
-var VERIFY_TTL_MS   = 24 * 60 * 60 * 1000;        // 24 hours
-
-// ── SHEET NAMES ───────────────────────────────────────────────────────────────
-
+// Sheet names
 var SHEET_ACCOUNTS    = 'Accounts';
 var SHEET_SESSIONS    = 'Sessions';
 var SHEET_SUBMISSIONS = 'Submissions';
+var SHEET_CRM_LOG     = 'CRM_Log';
 
-// ── ACCOUNTS columns (0-indexed) ──────────────────────────────────────────────
-var AC = { EMAIL:0, PW_HASH:1, FIRST:2, LAST:3, VERIFIED:4, VFY_TOKEN:5, VFY_EXPIRY:6, CREATED:7 };
-
-// ── SESSIONS columns ──────────────────────────────────────────────────────────
-var SC = { TOKEN:0, EMAIL:1, FIRST:2, EXPIRES:3, CREATED:4 };
-
-// ── SUBMISSIONS columns ───────────────────────────────────────────────────────
+// Column indices (0-based)
+var AC  = { EMAIL:0, PW_HASH:1, FIRST:2, LAST:3, VERIFIED:4, VFY_TOKEN:5, VFY_EXPIRY:6, CREATED:7, VERIFIED_AT:8 };
+var SC  = { TOKEN:0, EMAIL:1, FIRST:2, EXPIRES:3, CREATED:4 };
 var SUB = { ORDER_REF:0, TIMESTAMP:1, EMAIL:2, FIRST:3, SURNAME:4, ID_TYPE:5,
             ID_NUM:6, GENDER:7, MARITAL:8, PHONE:9, WORK_PHONE:10,
             ADDRESS:11, DOC_URL:12, STATUS:13, SESSION_TOKEN:14 };
+var CL  = { EMAIL:0, STAGE:1, SENT_AT:2 };
+
+// CRM follow-up schedule (milliseconds after the reference timestamp)
+var CRM_SCHEDULE = {
+  // Verified but never started personal details form
+  verify_d1:  1  * 24 * 60 * 60 * 1000,   // 1 day  after verification
+  verify_d3:  3  * 24 * 60 * 60 * 1000,   // 3 days after verification
+  verify_d7:  7  * 24 * 60 * 60 * 1000,   // 7 days after verification
+  // Submitted details but never completed payment
+  payment_d1: 1  * 24 * 60 * 60 * 1000,   // 1 day  after submission
+  payment_d3: 3  * 24 * 60 * 60 * 1000    // 3 days after submission
+};
 
 // ============================================================
-//  INITIALISE SHEETS  (run once manually)
+//  ONE-TIME SETUP  — run this manually from the editor
 // ============================================================
+
+function setup() {
+  initSheets();
+  initDriveFolder();
+  setupCrmTrigger();
+  Logger.log('Setup complete!');
+}
+
+// Call this separately if you only need to install the CRM trigger
+function setupCrmTrigger() {
+  // Remove any existing runCrmFollowUps triggers to avoid duplicates
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i].getHandlerFunction() === 'runCrmFollowUps') {
+      ScriptApp.deleteTrigger(triggers[i]);
+    }
+  }
+  // Create a daily trigger at 09:00 SAST (07:00 UTC)
+  ScriptApp.newTrigger('runCrmFollowUps')
+    .timeBased()
+    .everyDays(1)
+    .atHour(7)
+    .create();
+  Logger.log('CRM daily trigger installed (09:00 SAST).');
+}
 
 function initSheets() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
   function ensureSheet(name, headers) {
     var sheet = ss.getSheetByName(name);
-    if (!sheet) {
-      sheet = ss.insertSheet(name);
-    }
+    if (!sheet) sheet = ss.insertSheet(name);
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(headers);
       sheet.getRange(1, 1, 1, headers.length)
            .setFontWeight('bold')
-           .setBackground('#1e293b')
+           .setBackground('#0f172a')
            .setFontColor('#ffffff');
       sheet.setFrozenRows(1);
     }
@@ -66,7 +85,7 @@ function initSheets() {
 
   ensureSheet(SHEET_ACCOUNTS, [
     'Email','PasswordHash','FirstName','LastName',
-    'Verified','VerifyToken','VerifyTokenExpiry','CreatedAt'
+    'Verified','VerifyToken','VerifyTokenExpiry','CreatedAt','VerifiedAt'
   ]);
   ensureSheet(SHEET_SESSIONS, [
     'Token','Email','FirstName','ExpiresAt','CreatedAt'
@@ -76,8 +95,29 @@ function initSheets() {
     'IDType','IDNumber','Gender','MaritalStatus',
     'Phone','WorkPhone','Address','IDDocURL','Status','SessionToken'
   ]);
+  ensureSheet(SHEET_CRM_LOG, [
+    'Email','Stage','SentAt'
+  ]);
 
-  Logger.log('Sheets initialised successfully.');
+  Logger.log('Sheets initialised.');
+}
+
+function initDriveFolder() {
+  var props    = PropertiesService.getScriptProperties();
+  var existing = props.getProperty('DRIVE_FOLDER_ID');
+  if (existing) {
+    Logger.log('Drive folder already set: ' + existing);
+    return existing;
+  }
+  var folder = DriveApp.createFolder('StopTelemarketing — ID Documents');
+  folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
+  props.setProperty('DRIVE_FOLDER_ID', folder.getId());
+  Logger.log('Drive folder created: ' + folder.getId());
+  return folder.getId();
+}
+
+function getDriveFolderId() {
+  return PropertiesService.getScriptProperties().getProperty('DRIVE_FOLDER_ID') || '';
 }
 
 // ============================================================
@@ -89,26 +129,25 @@ function doGet(e) {
   var result;
   try {
     switch (action) {
-      case 'register':            result = handleRegister(e.parameter);           break;
-      case 'login':               result = handleLogin(e.parameter);              break;
-      case 'verifyEmail':         result = handleVerifyEmail(e.parameter);        break;
-      case 'checkSession':        result = handleCheckSession(e.parameter);       break;
-      case 'resendVerification':  result = handleResend(e.parameter);             break;
+      case 'register':            result = handleRegister(e.parameter);    break;
+      case 'login':               result = handleLogin(e.parameter);       break;
+      case 'verifyEmail':         result = handleVerifyEmail(e.parameter); break;
+      case 'checkSession':        result = handleCheckSession(e.parameter); break;
+      case 'resendVerification':  result = handleResend(e.parameter);      break;
       default:                    result = { error: 'Unknown action: ' + action };
     }
   } catch (err) {
-    Logger.log('doGet error [' + action + ']: ' + err.message);
+    Logger.log('doGet error [' + action + ']: ' + err.message + '\n' + err.stack);
     result = { error: 'Server error. Please try again.' };
   }
   return jsonOut(result);
 }
 
 function doPost(e) {
-  var params;
+  var params = {};
   try {
-    // Try JSON body first, fall back to form params
     if (e.postData && e.postData.contents) {
-      try { params = JSON.parse(e.postData.contents); } catch (_) { params = e.parameter; }
+      try { params = JSON.parse(e.postData.contents); } catch (_) { params = e.parameter || {}; }
     } else {
       params = e.parameter || {};
     }
@@ -118,7 +157,7 @@ function doPost(e) {
   try {
     result = handleSubmitDetails(params);
   } catch (err) {
-    Logger.log('doPost error: ' + err.message);
+    Logger.log('doPost error: ' + err.message + '\n' + err.stack);
     result = { error: 'Server error. Please try again.' };
   }
   return jsonOut(result);
@@ -131,34 +170,28 @@ function jsonOut(obj) {
 }
 
 // ============================================================
-//  HANDLER: register
-//  params: email, pwHash, firstName, lastName
+//  REGISTER
 // ============================================================
 
 function handleRegister(p) {
   var email     = normaliseEmail(p.email);
-  var pwHash    = (p.pwHash   || '').trim();
+  var pwHash    = (p.pwHash    || '').trim();
   var firstName = (p.firstName || '').trim();
   var lastName  = (p.lastName  || '').trim();
 
-  if (!email || !pwHash || !firstName || !lastName) {
+  if (!email || !pwHash || !firstName || !lastName)
     return { error: 'Missing required fields.' };
-  }
-  if (!isValidEmail(email)) {
+  if (!isValidEmail(email))
     return { error: 'Invalid email address.' };
-  }
 
   var sheet = getSheet(SHEET_ACCOUNTS);
   var rows  = sheet.getDataRange().getValues();
 
-  // Check for existing account
   for (var i = 1; i < rows.length; i++) {
-    if (normaliseEmail(rows[i][AC.EMAIL]) === email) {
+    if (normaliseEmail(rows[i][AC.EMAIL]) === email)
       return { error: 'An account with this email already exists. Please sign in.' };
-    }
   }
 
-  // Generate verification token
   var vfyToken  = Utilities.getUuid();
   var vfyExpiry = new Date(Date.now() + VERIFY_TTL_MS).toISOString();
 
@@ -167,50 +200,33 @@ function handleRegister(p) {
     false, vfyToken, vfyExpiry, new Date().toISOString()
   ]);
 
-  // Send verification email
   sendVerificationEmail(email, firstName, vfyToken);
-
   return { result: 'success' };
 }
 
 // ============================================================
-//  HANDLER: login
-//  params: email, pwHash
+//  LOGIN
 // ============================================================
 
 function handleLogin(p) {
   var email  = normaliseEmail(p.email);
   var pwHash = (p.pwHash || '').trim();
 
-  if (!email || !pwHash) {
+  if (!email || !pwHash)
     return { error: 'Missing email or password.' };
-  }
 
   var sheet = getSheet(SHEET_ACCOUNTS);
   var rows  = sheet.getDataRange().getValues();
 
   for (var i = 1; i < rows.length; i++) {
     if (normaliseEmail(rows[i][AC.EMAIL]) === email) {
-      var row = rows[i];
-
-      // Check password hash
-      if (row[AC.PW_HASH] !== pwHash) {
+      if (rows[i][AC.PW_HASH] !== pwHash)
         return { error: 'Incorrect email or password.' };
-      }
-
-      // Check email verified
-      if (!row[AC.VERIFIED]) {
+      if (!rows[i][AC.VERIFIED])
         return { result: 'success', verified: false };
-      }
 
-      // Create session
-      var token = createSession(email, row[AC.FIRST]);
-      return {
-        result:    'success',
-        verified:  true,
-        token:     token,
-        firstName: row[AC.FIRST]
-      };
+      var token = createSession(email, rows[i][AC.FIRST]);
+      return { result: 'success', verified: true, token: token, firstName: rows[i][AC.FIRST] };
     }
   }
 
@@ -218,8 +234,7 @@ function handleLogin(p) {
 }
 
 // ============================================================
-//  HANDLER: verifyEmail
-//  params: token
+//  VERIFY EMAIL
 // ============================================================
 
 function handleVerifyEmail(p) {
@@ -231,31 +246,27 @@ function handleVerifyEmail(p) {
 
   for (var i = 1; i < rows.length; i++) {
     if (rows[i][AC.VFY_TOKEN] === token) {
-      // Check expiry
-      var expiry = new Date(rows[i][AC.VFY_EXPIRY]);
-      if (Date.now() > expiry.getTime()) {
+      if (Date.now() > new Date(rows[i][AC.VFY_EXPIRY]).getTime())
         return { error: 'Verification link has expired. Please request a new one.' };
-      }
 
-      // Mark as verified, clear token
-      var rowNum = i + 1; // 1-indexed
-      sheet.getRange(rowNum, AC.VERIFIED + 1).setValue(true);
-      sheet.getRange(rowNum, AC.VFY_TOKEN + 1).setValue('');
-      sheet.getRange(rowNum, AC.VFY_EXPIRY + 1).setValue('');
+      var rowNum    = i + 1;
+      var verifiedAt = new Date().toISOString();
+      sheet.getRange(rowNum, AC.VERIFIED    + 1).setValue(true);
+      sheet.getRange(rowNum, AC.VFY_TOKEN   + 1).setValue('');
+      sheet.getRange(rowNum, AC.VFY_EXPIRY  + 1).setValue('');
+      sheet.getRange(rowNum, AC.VERIFIED_AT + 1).setValue(verifiedAt);
 
       var email = rows[i][AC.EMAIL];
       sendWelcomeEmail(email, rows[i][AC.FIRST]);
-
       return { result: 'success', email: email };
     }
   }
 
-  return { error: 'Invalid verification token. It may have already been used.' };
+  return { error: 'Invalid or already-used verification link.' };
 }
 
 // ============================================================
-//  HANDLER: checkSession
-//  params: token
+//  CHECK SESSION
 // ============================================================
 
 function handleCheckSession(p) {
@@ -267,26 +278,18 @@ function handleCheckSession(p) {
 
   for (var i = 1; i < rows.length; i++) {
     if (rows[i][SC.TOKEN] === token) {
-      var expires = new Date(rows[i][SC.EXPIRES]);
-      if (Date.now() > expires.getTime()) {
-        // Expired — clean up row
+      if (Date.now() > new Date(rows[i][SC.EXPIRES]).getTime()) {
         sheet.deleteRow(i + 1);
         return { valid: false };
       }
-      return {
-        valid:     true,
-        email:     rows[i][SC.EMAIL],
-        firstName: rows[i][SC.FIRST]
-      };
+      return { valid: true, email: rows[i][SC.EMAIL], firstName: rows[i][SC.FIRST] };
     }
   }
-
   return { valid: false };
 }
 
 // ============================================================
-//  HANDLER: resendVerification
-//  params: email
+//  RESEND VERIFICATION
 // ============================================================
 
 function handleResend(p) {
@@ -298,11 +301,9 @@ function handleResend(p) {
 
   for (var i = 1; i < rows.length; i++) {
     if (normaliseEmail(rows[i][AC.EMAIL]) === email) {
-      if (rows[i][AC.VERIFIED]) {
+      if (rows[i][AC.VERIFIED])
         return { error: 'This account is already verified. Please sign in.' };
-      }
 
-      // Issue a fresh token
       var newToken  = Utilities.getUuid();
       var newExpiry = new Date(Date.now() + VERIFY_TTL_MS).toISOString();
       var rowNum    = i + 1;
@@ -318,60 +319,52 @@ function handleResend(p) {
 }
 
 // ============================================================
-//  HANDLER: submitDetails (POST)
-//  Receives: sessionToken + all personal fields + idDocumentBase64
+//  SUBMIT DETAILS (POST)
 // ============================================================
 
 function handleSubmitDetails(p) {
   var sessionToken = (p.sessionToken || '').trim();
+  var sessionEmail = '';
 
-  // Validate session
   if (sessionToken) {
-    var sessionCheck = handleCheckSession({ token: sessionToken });
-    if (!sessionCheck.valid) {
-      return { error: 'Session expired. Please sign in again.' };
-    }
+    var check = handleCheckSession({ token: sessionToken });
+    if (!check.valid) return { error: 'Session expired. Please sign in again.' };
+    sessionEmail = check.email;
   }
 
-  var orderRef  = p.orderRef  || ('OPT' + Date.now());
-  var email     = p.email     || (sessionToken ? sessionCheck.email : '');
-  var firstName = p.firstName || '';
-  var surname   = p.surname   || '';
+  var orderRef = p.orderRef || ('OPT' + Date.now());
+  var email    = p.email || sessionEmail;
 
-  // Upload ID document to Drive (if provided)
-  var docUrl = '';
-  if (p.idDocumentBase64 && DRIVE_FOLDER_ID) {
+  var docUrl       = '';
+  var folderId     = getDriveFolderId();
+  var base64Content = p.idDocumentBase64 || '';
+
+  if (base64Content && folderId) {
     try {
-      var folder   = DriveApp.getFolderById(DRIVE_FOLDER_ID);
+      var folder   = DriveApp.getFolderById(folderId);
       var mimeType = p.idDocumentType || 'image/jpeg';
       var ext      = mimeType === 'application/pdf' ? '.pdf' : '.jpg';
       var fileName = orderRef + '_' + (email.split('@')[0]) + ext;
-      var blob     = Utilities.newBlob(
-        Utilities.base64Decode(p.idDocumentBase64),
-        mimeType,
-        fileName
-      );
-      var file = folder.createFile(blob);
+      var decoded  = Utilities.base64Decode(base64Content);
+      var blob     = Utilities.newBlob(decoded, mimeType, fileName);
+      var file     = folder.createFile(blob);
       file.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
       docUrl = file.getUrl();
     } catch (e) {
       Logger.log('Drive upload error: ' + e.message);
       docUrl = 'UPLOAD_FAILED';
     }
-  } else if (p.idDocumentBase64) {
-    // No folder configured — log a warning
-    Logger.log('Warning: DRIVE_FOLDER_ID not set. ID document not saved to Drive.');
-    docUrl = 'NO_DRIVE_FOLDER_CONFIGURED';
+  } else if (base64Content) {
+    Logger.log('Warning: Drive folder not set. Run setup() first.');
+    docUrl = 'NO_FOLDER_RUN_SETUP';
   }
 
-  // Save to Submissions sheet
-  var sheet = getSheet(SHEET_SUBMISSIONS);
-  sheet.appendRow([
+  getSheet(SHEET_SUBMISSIONS).appendRow([
     orderRef,
     p.timestamp || new Date().toISOString(),
     email,
-    firstName,
-    surname,
+    p.firstName     || '',
+    p.surname       || '',
     p.idType        || '',
     p.idNumber      || '',
     p.gender        || '',
@@ -395,10 +388,7 @@ function handleSubmitDetails(p) {
 function createSession(email, firstName) {
   var token   = Utilities.getUuid();
   var expires = new Date(Date.now() + SESSION_TTL_MS).toISOString();
-  getSheet(SHEET_SESSIONS).appendRow([
-    token, email, firstName, expires, new Date().toISOString()
-  ]);
-  // Clean up expired sessions periodically
+  getSheet(SHEET_SESSIONS).appendRow([token, email, firstName, expires, new Date().toISOString()]);
   cleanExpiredSessions();
   return token;
 }
@@ -407,134 +397,256 @@ function cleanExpiredSessions() {
   var sheet = getSheet(SHEET_SESSIONS);
   var rows  = sheet.getDataRange().getValues();
   var now   = Date.now();
-  // Walk backwards to avoid index shift when deleting
   for (var i = rows.length - 1; i >= 1; i--) {
-    var exp = new Date(rows[i][SC.EXPIRES]);
-    if (now > exp.getTime()) {
-      sheet.deleteRow(i + 1);
-    }
+    if (now > new Date(rows[i][SC.EXPIRES]).getTime()) sheet.deleteRow(i + 1);
   }
 }
 
 // ============================================================
-//  EMAIL HELPERS
+//  EMAILS
 // ============================================================
 
 function sendVerificationEmail(email, firstName, token) {
   var verifyUrl = SITE_URL + '/?verify=' + token;
-
-  var subject = 'Verify your StopTelemarketing account';
-
-  var body = 'Hi ' + firstName + ',\n\n' +
-    'Thank you for registering with StopTelemarketing.\n\n' +
-    'Click the link below to verify your email address:\n\n' +
-    verifyUrl + '\n\n' +
-    'This link expires in 24 hours.\n\n' +
-    'If you did not create this account, please ignore this email.\n\n' +
-    'Regards,\nThe StopTelemarketing Team\n' + SITE_URL;
+  var subject   = 'Verify your StopTelemarketing account';
 
   var htmlBody =
-    '<div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;">' +
-    '<div style="text-align:center;margin-bottom:32px;">' +
-    '<div style="display:inline-flex;align-items:center;gap:10px;">' +
-    '<div style="width:36px;height:36px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;">' +
-    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' +
-    '</div>' +
-    '<span style="font-size:18px;font-weight:800;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">StopTelemarketing</span>' +
+    '<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;">' +
+    '<div style="text-align:center;margin-bottom:28px;">' +
+    '<div style="background:#16a34a;display:inline-block;padding:10px 20px;border-radius:8px;">' +
+    '<span style="color:white;font-size:16px;font-weight:800;">STOPTELEMARKETING</span>' +
     '</div></div>' +
-    '<h2 style="font-size:24px;font-weight:800;color:#0f172a;margin-bottom:12px;">Verify your email</h2>' +
-    '<p style="font-size:15px;color:#475569;line-height:1.7;margin-bottom:24px;">Hi ' + firstName + ', thanks for signing up! Click the button below to verify your email address and activate your account.</p>' +
-    '<div style="text-align:center;margin-bottom:32px;">' +
-    '<a href="' + verifyUrl + '" style="display:inline-block;background:#16a34a;color:#fff;font-size:16px;font-weight:700;padding:16px 36px;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">Verify my email</a>' +
+    '<h2 style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:10px;">Verify your email address</h2>' +
+    '<p style="font-size:15px;color:#475569;line-height:1.7;margin-bottom:24px;">Hi ' + firstName + ', thanks for signing up! Click the button below to verify your email and activate your account.</p>' +
+    '<div style="text-align:center;margin-bottom:28px;">' +
+    '<a href="' + verifyUrl + '" style="display:inline-block;background:#16a34a;color:#fff;font-size:16px;font-weight:700;padding:16px 40px;border-radius:8px;text-decoration:none;">Verify my email</a>' +
     '</div>' +
-    '<p style="font-size:13px;color:#94a3b8;line-height:1.6;">Or copy this link into your browser:<br>' +
-    '<span style="color:#475569;word-break:break-all;">' + verifyUrl + '</span></p>' +
+    '<p style="font-size:13px;color:#94a3b8;line-height:1.6;">Or copy this link into your browser:<br><span style="color:#475569;word-break:break-all;">' + verifyUrl + '</span></p>' +
     '<hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">' +
     '<p style="font-size:12px;color:#94a3b8;">This link expires in 24 hours. If you did not create this account, please ignore this email.</p>' +
     '</div>';
 
   MailApp.sendEmail({
-    to:       email,
-    subject:  subject,
-    body:     body,
-    htmlBody: htmlBody,
-    name:     FROM_NAME
+    to: email, subject: subject, name: FROM_NAME,
+    body: 'Hi ' + firstName + ',\n\nVerify your email:\n' + verifyUrl + '\n\nThis link expires in 24 hours.\n\nStopTelemarketing',
+    htmlBody: htmlBody
   });
 }
 
 function sendWelcomeEmail(email, firstName) {
-  var subject = 'Email verified — complete your opt-out registration';
-
   var loginUrl = SITE_URL + '/#order';
-
-  var body = 'Hi ' + firstName + ',\n\n' +
-    'Your email address has been verified.\n\n' +
-    'Sign in to complete your opt-out registration:\n' +
-    loginUrl + '\n\n' +
-    'Regards,\nThe StopTelemarketing Team\n' + SITE_URL;
+  var subject  = 'Email verified — complete your opt-out registration';
 
   var htmlBody =
-    '<div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;">' +
-    '<div style="text-align:center;margin-bottom:32px;">' +
-    '<div style="width:64px;height:64px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">' +
-    '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>' +
+    '<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;">' +
+    '<div style="text-align:center;margin-bottom:28px;">' +
+    '<div style="width:64px;height:64px;background:#dcfce7;border-radius:50%;margin:0 auto 12px;line-height:64px;text-align:center;">' +
+    '<span style="font-size:32px;color:#16a34a;">&#10003;</span>' +
     '</div>' +
-    '<h2 style="font-size:24px;font-weight:800;color:#0f172a;margin-bottom:8px;">Email verified!</h2>' +
+    '<h2 style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:6px;">Email verified!</h2>' +
     '</div>' +
-    '<p style="font-size:15px;color:#475569;line-height:1.7;margin-bottom:24px;">Hi ' + firstName + ', your email address is now verified. Sign in to complete your opt-out registration and upload your ID document.</p>' +
-    '<div style="text-align:center;margin-bottom:32px;">' +
-    '<a href="' + loginUrl + '" style="display:inline-block;background:#16a34a;color:#fff;font-size:16px;font-weight:700;padding:16px 36px;border-radius:8px;text-decoration:none;">Complete my registration</a>' +
+    '<p style="font-size:15px;color:#475569;line-height:1.7;margin-bottom:24px;">Hi ' + firstName + ', your email is verified. Sign in to complete your opt-out registration.</p>' +
+    '<div style="text-align:center;margin-bottom:28px;">' +
+    '<a href="' + loginUrl + '" style="display:inline-block;background:#16a34a;color:#fff;font-size:16px;font-weight:700;padding:16px 40px;border-radius:8px;text-decoration:none;">Complete my registration</a>' +
     '</div>' +
     '<hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">' +
-    '<p style="font-size:12px;color:#94a3b8;">Questions? Reply to this email or contact ' + SUPPORT_EMAIL + '</p>' +
+    '<p style="font-size:12px;color:#94a3b8;">Questions? Email ' + SUPPORT_EMAIL + '</p>' +
     '</div>';
 
   MailApp.sendEmail({
-    to:       email,
-    subject:  subject,
-    body:     body,
-    htmlBody: htmlBody,
-    name:     FROM_NAME
+    to: email, subject: subject, name: FROM_NAME,
+    body: 'Hi ' + firstName + ',\n\nYour email is verified.\n\nComplete your registration:\n' + loginUrl + '\n\nStopTelemarketing',
+    htmlBody: htmlBody
   });
 }
 
 // ============================================================
-//  UTILITY FUNCTIONS
+//  CRM — TIME-TRIGGERED FOLLOW-UP EMAILS
+// ============================================================
+//  runCrmFollowUps() is called daily by the time trigger.
+//  It sends emails in two sequences:
+//    A) Verified users who never submitted personal details
+//    B) Users who submitted details but never paid
+// ============================================================
+
+function runCrmFollowUps() {
+  var now         = Date.now();
+  var logSheet    = getSheet(SHEET_CRM_LOG);
+  var sentLog     = buildCrmLog(logSheet);   // { "email|stage": true }
+
+  var acctRows    = getSheet(SHEET_ACCOUNTS).getDataRange().getValues();
+  var subRows     = getSheet(SHEET_SUBMISSIONS).getDataRange().getValues();
+
+  // Build set of emails that have a Submission row
+  var submittedEmails = {};
+  for (var s = 1; s < subRows.length; s++) {
+    submittedEmails[normaliseEmail(subRows[s][SUB.EMAIL])] = subRows[s][SUB.TIMESTAMP];
+  }
+
+  var emailsSent = 0;
+
+  for (var a = 1; a < acctRows.length; a++) {
+    var row       = acctRows[a];
+    var email     = normaliseEmail(row[AC.EMAIL]);
+    var firstName = row[AC.FIRST] || 'there';
+    var verified  = row[AC.VERIFIED];
+
+    if (!verified) continue;  // not verified yet — skip
+
+    var verifiedAt = row[AC.VERIFIED_AT] ? new Date(row[AC.VERIFIED_AT]).getTime() : null;
+
+    // ----- Sequence A: verified but never submitted -----
+    if (!submittedEmails[email] && verifiedAt) {
+      var ageMs = now - verifiedAt;
+
+      if (ageMs >= CRM_SCHEDULE.verify_d7 && !hasSent(sentLog, email, 'verify_d7')) {
+        sendCrmEmail(email, firstName, 'verify_d7');
+        logSent(logSheet, email, 'verify_d7');
+        sentLog[email + '|verify_d7'] = true;
+        emailsSent++;
+      } else if (ageMs >= CRM_SCHEDULE.verify_d3 && !hasSent(sentLog, email, 'verify_d3')) {
+        sendCrmEmail(email, firstName, 'verify_d3');
+        logSent(logSheet, email, 'verify_d3');
+        sentLog[email + '|verify_d3'] = true;
+        emailsSent++;
+      } else if (ageMs >= CRM_SCHEDULE.verify_d1 && !hasSent(sentLog, email, 'verify_d1')) {
+        sendCrmEmail(email, firstName, 'verify_d1');
+        logSent(logSheet, email, 'verify_d1');
+        sentLog[email + '|verify_d1'] = true;
+        emailsSent++;
+      }
+    }
+
+    // ----- Sequence B: submitted but never paid -----
+    if (submittedEmails[email]) {
+      var subTime = submittedEmails[email] ? new Date(submittedEmails[email]).getTime() : null;
+
+      // Check status — only follow up on pending_payment
+      var isPending = false;
+      for (var s2 = 1; s2 < subRows.length; s2++) {
+        if (normaliseEmail(subRows[s2][SUB.EMAIL]) === email &&
+            subRows[s2][SUB.STATUS] === 'pending_payment') {
+          isPending  = true;
+          subTime    = new Date(subRows[s2][SUB.TIMESTAMP]).getTime();
+          break;
+        }
+      }
+
+      if (isPending && subTime) {
+        var subAgeMs = now - subTime;
+
+        if (subAgeMs >= CRM_SCHEDULE.payment_d3 && !hasSent(sentLog, email, 'payment_d3')) {
+          sendCrmEmail(email, firstName, 'payment_d3');
+          logSent(logSheet, email, 'payment_d3');
+          emailsSent++;
+        } else if (subAgeMs >= CRM_SCHEDULE.payment_d1 && !hasSent(sentLog, email, 'payment_d1')) {
+          sendCrmEmail(email, firstName, 'payment_d1');
+          logSent(logSheet, email, 'payment_d1');
+          emailsSent++;
+        }
+      }
+    }
+  }
+
+  Logger.log('CRM run complete. Emails sent: ' + emailsSent);
+}
+
+function buildCrmLog(logSheet) {
+  var map  = {};
+  var rows = logSheet.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    map[rows[i][CL.EMAIL] + '|' + rows[i][CL.STAGE]] = true;
+  }
+  return map;
+}
+
+function hasSent(sentLog, email, stage) {
+  return !!sentLog[email + '|' + stage];
+}
+
+function logSent(logSheet, email, stage) {
+  logSheet.appendRow([email, stage, new Date().toISOString()]);
+}
+
+function sendCrmEmail(email, firstName, stage) {
+  var loginUrl  = SITE_URL + '/#order';
+  var subject, headline, body, cta;
+
+  switch (stage) {
+    // ---- Verified, never submitted ----
+    case 'verify_d1':
+      subject  = firstName + ', your opt-out is not complete yet';
+      headline = 'Your account is ready — finish your registration';
+      body     = 'Hi ' + firstName + ',<br><br>You verified your email yesterday — great start! You just need to sign in and complete your personal details to get your name removed from telemarketing lists across South Africa.';
+      cta      = 'Complete my registration';
+      break;
+    case 'verify_d3':
+      subject  = 'Still getting unwanted calls, ' + firstName + '?';
+      headline = 'Remove yourself from calling lists today';
+      body     = 'Hi ' + firstName + ',<br><br>You\'re only a few minutes away from stopping those annoying calls. Your account is verified and waiting — just sign in to finish the process.';
+      cta      = 'Sign in and finish';
+      break;
+    case 'verify_d7':
+      subject  = 'Last reminder — complete your opt-out';
+      headline = 'Don\'t let telemarketers keep calling you';
+      body     = 'Hi ' + firstName + ',<br><br>A week ago you signed up to stop telemarketing calls. We don\'t want to keep emailing you, but we also don\'t want you to miss out. Take 3 minutes to complete your registration.';
+      cta      = 'Complete now — R199';
+      break;
+    // ---- Submitted, never paid ----
+    case 'payment_d1':
+      subject  = 'Your details are saved — just one step left, ' + firstName;
+      headline = 'Complete your payment to activate your opt-out';
+      body     = 'Hi ' + firstName + ',<br><br>You\'ve submitted your personal details — well done! The only thing left is the once-off R199 payment that activates your opt-out registration with the NCC.';
+      cta      = 'Complete payment — R199';
+      break;
+    case 'payment_d3':
+      subject  = firstName + ', your opt-out is still pending';
+      headline = 'Your registration is waiting for payment';
+      body     = 'Hi ' + firstName + ',<br><br>Your personal details are safely saved, but your opt-out won\'t be submitted until payment is received. Complete the once-off R199 payment to activate your registration.';
+      cta      = 'Pay now and stop the calls';
+      break;
+    default:
+      return;
+  }
+
+  var htmlBody =
+    '<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;">' +
+    '<div style="text-align:center;margin-bottom:28px;">' +
+    '<div style="background:#16a34a;display:inline-block;padding:10px 20px;border-radius:8px;">' +
+    '<span style="color:white;font-size:16px;font-weight:800;">STOPTELEMARKETING</span>' +
+    '</div></div>' +
+    '<h2 style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:10px;">' + headline + '</h2>' +
+    '<p style="font-size:15px;color:#475569;line-height:1.7;margin-bottom:24px;">' + body + '</p>' +
+    '<div style="text-align:center;margin-bottom:28px;">' +
+    '<a href="' + loginUrl + '" style="display:inline-block;background:#16a34a;color:#fff;font-size:16px;font-weight:700;padding:16px 40px;border-radius:8px;text-decoration:none;">' + cta + '</a>' +
+    '</div>' +
+    '<hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">' +
+    '<p style="font-size:12px;color:#94a3b8;">You\'re receiving this because you signed up at stoptelemarketing.co.za. ' +
+    'If you no longer wish to receive these reminders, reply with "unsubscribe" to ' + SUPPORT_EMAIL + '</p>' +
+    '</div>';
+
+  MailApp.sendEmail({
+    to: email,
+    subject: subject,
+    name: FROM_NAME,
+    body: headline + '\n\n' + body.replace(/<br><br>/g, '\n\n').replace(/<[^>]+>/g, '') + '\n\n' + loginUrl,
+    htmlBody: htmlBody
+  });
+
+  Logger.log('CRM email sent [' + stage + '] → ' + email);
+}
+
+// ============================================================
+//  UTILITIES
 // ============================================================
 
 function getSheet(name) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name);
-  if (!sheet) throw new Error('Sheet "' + name + '" not found. Run initSheets() first.');
+  var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(name);
+  if (!sheet) throw new Error('Sheet "' + name + '" not found. Run setup() first.');
   return sheet;
 }
 
-function normaliseEmail(email) {
-  return (email || '').trim().toLowerCase();
-}
+function normaliseEmail(email) { return (email || '').trim().toLowerCase(); }
+function isValidEmail(email)   { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
 
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-// ============================================================
-//  PAYFAST PAYMENT NOTIFICATION  (optional — for notify_url)
-//  If your notify_url points to this script, add ?action=payfastNotify
-// ============================================================
-
-function handlePayfastNotify(p) {
-  // TODO: verify PayFast signature before trusting these params
-  // See: https://developers.payfast.co.za/docs#step_4_notify_your_site
-  var orderRef = p.custom_str1 || '';
-  if (!orderRef) return { error: 'Missing order ref' };
-
-  var sheet = getSheet(SHEET_SUBMISSIONS);
-  var rows  = sheet.getDataRange().getValues();
-  for (var i = 1; i < rows.length; i++) {
-    if (rows[i][SUB.ORDER_REF] === orderRef) {
-      sheet.getRange(i + 1, SUB.STATUS + 1).setValue('paid');
-      Logger.log('Payment confirmed for: ' + orderRef);
-      break;
-    }
-  }
-  return { result: 'success' };
-}
+// v2.1 — CRM follow-up emails added Thu May 21 SAST 2026
