@@ -865,7 +865,7 @@ function sendRegistrationConfirmEmail(email, firstName, orderRef) {
     '</div>' +
 
     '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-bottom:24px;font-size:13px;color:#1e40af;line-height:1.65;">' +
-    '<strong>Still getting calls after 6 weeks?</strong> Reply to this email with your order reference <strong>' + orderRef + '</strong> and we\'ll resubmit at no charge.' +
+    '<strong>Still getting calls after 6 weeks?</strong> Reply to this email with your order reference <strong>' + orderRef + '</strong> and the caller details — we\'ll file an official NCC complaint on your behalf at no charge.' +
     '</div>' +
 
     '<hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">' +
