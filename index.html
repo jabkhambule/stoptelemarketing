@@ -714,7 +714,7 @@
             <div>
                 <div class="hero-kicker">
                     <span class="hero-kicker-dot"></span>
-                    Official NCC Opt-Out Service
+                    Trusted by 12,400+ South Africans · Official NCC Opt-Out
                 </div>
                 <h1>
                     Stop Unwanted<br>Telemarketing Calls
@@ -889,7 +889,7 @@
                     <img class="testimonial-avatar" src="assets/lerato-m.png" alt="Lerato M." width="56" height="56">
                     <div>
                         <div class="testimonial-name">Lerato M.</div>
-                        <div class="testimonial-loc">Johannesburg</div>
+                        <div class="testimonial-loc">Johannesburg · <span style="color:var(--text-soft);font-weight:400;">Feb 2026</span></div>
                         <div class="testimonial-stars">★★★★★</div>
                     </div>
                 </div>
@@ -900,7 +900,7 @@
                     <img class="testimonial-avatar" src="assets/sipho-n.png" alt="Sipho N." width="56" height="56">
                     <div>
                         <div class="testimonial-name">Sipho N.</div>
-                        <div class="testimonial-loc">Durban</div>
+                        <div class="testimonial-loc">Durban · <span style="color:var(--text-soft);font-weight:400;">Jan 2026</span></div>
                         <div class="testimonial-stars">★★★★★</div>
                     </div>
                 </div>
@@ -911,7 +911,7 @@
                     <img class="testimonial-avatar" src="assets/michelle-d.png" alt="Michelle D." width="56" height="56">
                     <div>
                         <div class="testimonial-name">Michelle D.</div>
-                        <div class="testimonial-loc">Pretoria</div>
+                        <div class="testimonial-loc">Cape Town · <span style="color:var(--text-soft);font-weight:400;">Mar 2026</span></div>
                         <div class="testimonial-stars">★★★★★</div>
                     </div>
                 </div>
@@ -1080,10 +1080,14 @@
                 <div class="form-progress" id="formProgress">
                     <div class="progress-step active" id="prog-1">
                         <div class="progress-dot">1</div>
-                        <div class="progress-label">Your Details</div>
+                        <div class="progress-label">Payment</div>
                     </div>
                     <div class="progress-step" id="prog-2">
                         <div class="progress-dot">2</div>
+                        <div class="progress-label">Your Details</div>
+                    </div>
+                    <div class="progress-step" id="prog-3">
+                        <div class="progress-dot">3</div>
                         <div class="progress-label">ID Upload</div>
                     </div>
                 </div>
@@ -1091,10 +1095,53 @@
                 <div class="form-card-body">
                     <div id="prot-alertContainer"></div>
 
-                    <!-- Protected Step 1 -->
-                    <div class="form-step" id="prot-step1">
+                    <!-- Protected Step 0: Payment -->
+                    <div class="form-step" id="prot-step0">
                         <div class="step-header">
                             <span class="step-number">1</span>
+                            <span class="step-title">Complete Your Registration</span>
+                        </div>
+                        <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;">
+                            <div style="font-size:26px;font-weight:900;color:var(--navy);margin-bottom:2px;">R199 <span style="font-size:14px;font-weight:500;color:var(--text-mid);">once-off · no subscription</span></div>
+                            <div style="height:1px;background:var(--border);margin:16px 0;"></div>
+                            <div style="display:flex;flex-direction:column;gap:11px;">
+                                <div style="display:flex;align-items:flex-start;gap:10px;">
+                                    <svg style="flex-shrink:0;margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                                    <span style="font-size:14px;color:var(--text);">Official NCC opt-out registration — all categories</span>
+                                </div>
+                                <div style="display:flex;align-items:flex-start;gap:10px;">
+                                    <svg style="flex-shrink:0;margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                                    <span style="font-size:14px;color:var(--text);">We handle all paperwork and submissions on your behalf</span>
+                                </div>
+                                <div style="display:flex;align-items:flex-start;gap:10px;">
+                                    <svg style="flex-shrink:0;margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                                    <span style="font-size:14px;color:var(--text);">Written confirmation of your registration</span>
+                                </div>
+                                <div style="display:flex;align-items:flex-start;gap:10px;">
+                                    <svg style="flex-shrink:0;margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                                    <span style="font-size:14px;color:var(--text);">Resubmission support if telemarketers don't comply</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background:#fff8ed;border:1px solid #fde68a;border-left:3px solid var(--amber);padding:13px 16px;border-radius:var(--radius-sm);margin-bottom:22px;font-size:13px;color:#92400e;line-height:1.65;">
+                            <strong>Why pay first?</strong> Your ID document and personal details are sensitive data. We only collect them inside your verified, secure account — after payment confirms your intent. Your ID is never exposed through an open, unauthenticated form.
+                        </div>
+                        <button type="button" id="payBtn" class="proceed-button" onclick="initiatePayment()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            <span id="payText">Pay R199 Securely</span>
+                            <span id="paySpinner" class="spinner hidden"></span>
+                        </button>
+                        <p style="text-align:center;font-size:13px;color:var(--text-soft);margin-top:10px;">Secured by PayFast · Visa · Mastercard · Instant EFT</p>
+                    </div>
+
+                    <!-- Protected Step 1: Details (shown AFTER payment) -->
+                    <div class="form-step hidden" id="prot-step1">
+                        <div style="background:var(--green-light);border:1px solid #bbf7d0;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green-xdark);font-weight:600;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                            Payment confirmed — now complete your details securely.
+                        </div>
+                        <div class="step-header">
+                            <span class="step-number">2</span>
                             <span class="step-title">Your Personal Details</span>
                         </div>
                         <div class="name-grid">
@@ -1159,16 +1206,20 @@
                             <span id="step1Text">Continue to ID Upload</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </button>
+                        <p style="text-align:center;font-size:12px;color:var(--text-soft);margin-top:12px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            Your details are encrypted and stored only in your private account
+                        </p>
                     </div>
 
                     <!-- Protected Step 2 -->
                     <div class="form-step hidden" id="prot-step2">
                         <div class="step-header">
-                            <span class="step-number">2</span>
+                            <span class="step-number">3</span>
                             <span class="step-title">Upload Your ID Document</span>
                         </div>
                         <div class="privacy-note" style="margin-bottom:24px;">
-                            <strong>Why we need this:</strong> The NCC requires a copy of your ID to process the opt-out. Because you are signed in, your document is encrypted and stored securely &#8212; never accessible without your login.
+                            <strong>Why we need this:</strong> Under NCC regulations, a copy of your ID or passport is legally required to register you on the National Do Not Call Registry — it proves you are the person being opted out. We submit it on your behalf, store it in a private encrypted folder accessible only to you, and delete it within 30 days of your registration being confirmed. It is never shared with any third party.
                         </div>
                         <div class="form-group">
                             <label>ID Document or Passport <span style="color:#dc2626">*</span></label>
@@ -1185,16 +1236,30 @@
                                 <span id="fileName"></span>
                             </div>
                         </div>
-                        <button onclick="proceedToPayment()" id="proceedBtn" class="proceed-button" disabled type="button">
-                            <span id="proceedText">Pay R199 Securely</span>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        <button onclick="submitAfterPayment()" id="proceedBtn" class="proceed-button" disabled type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                            <span id="proceedText">Submit My Details</span>
                             <span id="proceedSpinner" class="spinner hidden"></span>
                         </button>
-                        <p style="text-align:center;font-size:13px;color:var(--text-soft);margin-top:10px;">Once-off &#183; No subscription &#183; Secure via PayFast</p>
+                        <p style="text-align:center;font-size:13px;color:var(--text-soft);margin-top:10px;">Your payment is already confirmed — this completes your registration</p>
                     </div>
 
                     <div class="legal-note">
                         <strong>Important:</strong> We are not affiliated with the NCC but use their official opt-out system on your behalf. Your information is handled in strict compliance with POPIA.
+                    </div>
+
+                    <!-- SUCCESS STATE -->
+                    <div class="form-step hidden" id="prot-success" style="text-align:center;padding:24px 0;">
+                        <div style="width:72px;height:72px;background:var(--green-mid);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                        </div>
+                        <h3 style="font-size:20px;font-weight:800;color:var(--navy);margin-bottom:10px;">Registration received!</h3>
+                        <p style="font-size:15px;color:var(--text-mid);line-height:1.7;max-width:360px;margin:0 auto 20px;">We're processing your opt-out with the NCC. You'll receive a confirmation email once your registration is active.</p>
+                        <div style="background:var(--green-light);border:1px solid #bbf7d0;border-radius:var(--radius-sm);padding:16px;font-size:13px;color:var(--green-xdark);line-height:1.65;">
+                            <strong>What happens next:</strong><br>
+                            We submit your details to the NCC within 1–2 business days.<br>
+                            Telemarketing calls should reduce significantly within 4–6 weeks.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1216,7 +1281,7 @@
             </div>
             <div class="faq-item">
                 <div class="faq-q" onclick="toggleFaq(this)">Can I do this myself for free?<span class="faq-chevron">▾</span></div>
-                <div class="faq-body"><div class="faq-a">Yes — you can submit directly through the NCC. Our R199 fee covers the convenience of having it done correctly and quickly without navigating the process yourself.</div></div>
+                <div class="faq-body"><div class="faq-a">Technically yes — the NCC has a self-service portal. In practice, many people find it confusing: you must know which opt-out categories apply to you, submit a certified ID copy in the correct format, navigate the government portal, and follow up manually if your registration isn't confirmed. Most people who try it themselves either do it incompletely or give up. Our R199 covers having it done correctly the first time, with written confirmation — and we handle any resubmissions if telemarketers don't comply.</div></div>
             </div>
             <div class="faq-item">
                 <div class="faq-q" onclick="toggleFaq(this)">How long before calls stop?<span class="faq-chevron">▾</span></div>
@@ -1317,7 +1382,7 @@
 <form id="payfastForm" action="https://www.payfast.co.za/eng/process" method="POST" style="display:none;">
     <input type="hidden" name="merchant_id"      id="merchant_id"      value="31907641">
     <input type="hidden" name="merchant_key"     id="merchant_key"     value="omutyofcmqnez">
-    <input type="hidden" name="return_url"        id="return_url"       value="https://stoptelemarketing.co.za/success.html">
+    <input type="hidden" name="return_url"        id="return_url"       value="https://stoptelemarketing.co.za/?payment=success">
     <input type="hidden" name="cancel_url"        id="cancel_url"       value="https://stoptelemarketing.co.za">
     <input type="hidden" name="notify_url"        id="notify_url"       value="https://stoptelemarketing.co.za/.netlify/functions/payfast-notify">
     <input type="hidden" name="name_first"        id="name_first">
@@ -1417,16 +1482,32 @@
         document.getElementById('tab-login').classList.toggle('active', !isReg);
     }
 
-    function showProtectedState(firstName, email) {
+    // paymentDone: true = came back from PayFast, show details form
+    function showProtectedState(firstName, email, paymentDone) {
         document.getElementById('state-auth').classList.add('hidden');
         document.getElementById('state-check-email').classList.add('hidden');
         document.getElementById('state-protected').classList.remove('hidden');
         document.getElementById('user-name-display').textContent = firstName;
         document.getElementById('user-email-display').textContent = email;
         document.getElementById('user-avatar').textContent = firstName.charAt(0).toUpperCase();
-        var fn = document.getElementById('firstName');
-        if (fn && !fn.value) fn.value = firstName;
-        setProgress(1);
+
+        // Always hide all protected sub-steps first
+        ['prot-step0','prot-step1','prot-step2','prot-success'].forEach(function(id){
+            var el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        });
+
+        if (paymentDone) {
+            // Payment already made — show details form
+            document.getElementById('prot-step1').classList.remove('hidden');
+            var fn = document.getElementById('firstName');
+            if (fn && !fn.value) fn.value = firstName;
+            setProgress(2);
+        } else {
+            // Not yet paid — show payment step
+            document.getElementById('prot-step0').classList.remove('hidden');
+            setProgress(1);
+        }
     }
 
     // Register
@@ -1516,26 +1597,52 @@
         } catch(err) { showAlert('Verification error. Please try again.', 'error'); }
     }
 
-    // On load: check existing session or verify param
+    // On load: check existing session, verify param, or payment return
     window.addEventListener('DOMContentLoaded', function() {
-        var params = new URLSearchParams(window.location.search);
-        var vt = params.get('verify');
+        var params   = new URLSearchParams(window.location.search);
+        var vt       = params.get('verify');
+        var payment  = params.get('payment');
+
         if (vt) { handleEmailVerification(vt); return; }
+
         var session = getSession();
+
+        if (payment === 'success') {
+            // Returning from PayFast — clean URL and show details form
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+            if (session && session.token && session.verified) {
+                // Scroll to the form
+                setTimeout(function(){
+                    var el = document.getElementById('order');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 200);
+                fetch(GOOGLE_SCRIPT_URL + '?action=checkSession&token=' + session.token, { redirect: 'follow' })
+                    .then(function(r){ return r.json(); })
+                    .then(function(data){
+                        if (data.valid) showProtectedState(session.firstName, session.email, true);
+                        else { clearSession(); showAlert('Your session expired. Please sign in again.', 'error'); }
+                    })
+                    .catch(function(){ showProtectedState(session.firstName, session.email, true); });
+            } else {
+                showAlert('Payment received! Please sign in to complete your registration.', 'success');
+            }
+            return;
+        }
+
         if (session && session.token && session.verified) {
             fetch(GOOGLE_SCRIPT_URL + '?action=checkSession&token=' + session.token, { redirect: 'follow' })
                 .then(function(r){ return r.json(); })
                 .then(function(data){
-                    if (data.valid) showProtectedState(session.firstName, session.email);
+                    if (data.valid) showProtectedState(session.firstName, session.email, false);
                     else clearSession();
                 })
-                .catch(function(){ showProtectedState(session.firstName, session.email); });
+                .catch(function(){ showProtectedState(session.firstName, session.email, false); });
         }
     });
 
-    // 2-step progress
+    // 3-step progress (1=Payment, 2=Details, 3=ID Upload)
     function setProgress(step) {
-        for (var i = 1; i <= 2; i++) {
+        for (var i = 1; i <= 3; i++) {
             var el = document.getElementById('prog-' + i);
             if (!el) continue;
             el.classList.remove('active','done');
@@ -1544,7 +1651,7 @@
         }
     }
 
-    // Validate protected step 1
+    // Validate protected step 1 (details) → advance to ID upload
     function validateProtectedStep1() {
         var firstName     = document.getElementById('firstName').value.trim();
         var surname       = document.getElementById('surname').value.trim();
@@ -1562,7 +1669,7 @@
         }
         document.getElementById('prot-step1').classList.add('hidden');
         document.getElementById('prot-step2').classList.remove('hidden');
-        setProgress(2);
+        setProgress(3);
     }
 
     // File upload
@@ -1582,8 +1689,29 @@
         reader.readAsDataURL(file);
     }
 
-    // Proceed to PayFast
-    async function proceedToPayment() {
+    // Step 0 → PayFast: collect payment before any personal data
+    function initiatePayment() {
+        var session = getSession();
+        if (!session || !session.token) { showProtAlert('Please sign in first.', 'error'); return; }
+        var orderRef = 'OPT' + Date.now();
+        localStorage.setItem('st_pending_order', orderRef);
+
+        document.getElementById('name_first').value    = session.firstName;
+        document.getElementById('email_address').value = session.email;
+        document.getElementById('cell_number').value   = '';
+        document.getElementById('custom_str1').value   = orderRef;
+        document.getElementById('custom_str2').value   = session.email;
+        document.getElementById('custom_str3').value   = session.token;
+
+        document.getElementById('payBtn').disabled = true;
+        document.getElementById('payText').textContent = 'Redirecting to PayFast...';
+        document.getElementById('paySpinner').classList.remove('hidden');
+
+        setTimeout(function(){ document.getElementById('payfastForm').submit(); }, 600);
+    }
+
+    // Step 3 → GAS: submit personal details + ID document after payment confirmed
+    async function submitAfterPayment() {
         if (!uploadedFileBase64) { showProtAlert('Please upload your ID document.', 'error'); return; }
         var session       = getSession();
         var firstName     = document.getElementById('firstName').value.trim();
@@ -1596,53 +1724,50 @@
         var phone         = document.getElementById('phone').value.trim();
         var workPhone     = document.getElementById('workPhone').value.trim();
         var address       = document.getElementById('address').value.trim();
-        var orderRef      = 'OPT' + Date.now();
+        var orderRef      = localStorage.getItem('st_pending_order') || ('OPT' + Date.now());
 
-        var uploadData = {
-            orderRef: orderRef, timestamp: new Date().toISOString(),
-            sessionToken: session ? session.token : '',
-            firstName: firstName, surname: surname, idType: idType, idNumber: idNumber,
-            gender: gender, maritalStatus: maritalStatus, email: email,
-            phone: phone, workPhone: workPhone || '', address: address,
-            idDocumentBase64: uploadedFileBase64,
-            idDocumentType: uploadedFileName.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg'
-        };
+        var btn = document.getElementById('proceedBtn');
+        btn.disabled = true;
+        document.getElementById('proceedText').textContent = 'Submitting...';
+        document.getElementById('proceedSpinner').classList.remove('hidden');
 
-        var iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.name = 'uploadFrame_' + Date.now();
-        document.body.appendChild(iframe);
-
-        var form = document.createElement('form');
-        form.target = iframe.name; form.method = 'POST'; form.action = GOOGLE_SCRIPT_URL;
-        Object.keys(uploadData).forEach(function(key) {
-            var inp = document.createElement('input');
-            inp.type = 'hidden'; inp.name = key; inp.value = uploadData[key];
-            form.appendChild(inp);
-        });
-        document.body.appendChild(form);
-
-        var preparePayFast = function() {
-            document.getElementById('name_first').value    = firstName;
-            document.getElementById('email_address').value = email;
-            document.getElementById('cell_number').value   = phone.replace(/\D/g, '');
-            document.getElementById('custom_str1').value   = orderRef;
-            document.getElementById('custom_str2').value   = email;
-            document.getElementById('custom_str3').value   = phone;
-            showProtAlert('Redirecting to secure payment...', 'success');
-            setTimeout(function(){ document.getElementById('payfastForm').submit(); }, 1500);
-        };
-
-        var done = false;
-        iframe.onload = function() {
-            if (!done) {
-                done = true;
-                setTimeout(function(){ try { document.body.removeChild(form); document.body.removeChild(iframe); } catch(e){} }, 100);
-                preparePayFast();
+        try {
+            var payload = JSON.stringify({
+                orderRef: orderRef, timestamp: new Date().toISOString(),
+                sessionToken: session ? session.token : '',
+                firstName: firstName, surname: surname, idType: idType, idNumber: idNumber,
+                gender: gender, maritalStatus: maritalStatus, email: email,
+                phone: phone, workPhone: workPhone || '', address: address,
+                idDocumentBase64: uploadedFileBase64,
+                idDocumentType: uploadedFileName && uploadedFileName.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg',
+                paymentStatus: 'paid'
+            });
+            var res  = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: payload, redirect: 'follow'
+            });
+            var data = await res.json();
+            if (data.result === 'success') {
+                localStorage.removeItem('st_pending_order');
+                // Hide all form steps, show success state
+                ['prot-step0','prot-step1','prot-step2'].forEach(function(id){
+                    var el = document.getElementById(id);
+                    if (el) el.classList.add('hidden');
+                });
+                document.getElementById('prot-success').classList.remove('hidden');
+                document.getElementById('formProgress').style.display = 'none';
+            } else {
+                showProtAlert(data.error || 'Submission failed. Please try again.', 'error');
+                btn.disabled = false;
+                document.getElementById('proceedText').textContent = 'Submit My Details';
+                document.getElementById('proceedSpinner').classList.add('hidden');
             }
-        };
-        setTimeout(function(){ if (!done) { done = true; preparePayFast(); } }, 5000);
-        form.submit();
+        } catch(err) {
+            showProtAlert('Connection error. Please try again.', 'error');
+            btn.disabled = false;
+            document.getElementById('proceedText').textContent = 'Submit My Details';
+            document.getElementById('proceedSpinner').classList.add('hidden');
+        }
     }
 
     // FAQ
