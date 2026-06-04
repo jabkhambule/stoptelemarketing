@@ -1384,7 +1384,7 @@
     <input type="hidden" name="merchant_key"     id="merchant_key"     value="omutyofcmqnez">
     <input type="hidden" name="return_url"        id="return_url"       value="https://stoptelemarketing.co.za/?payment=success">
     <input type="hidden" name="cancel_url"        id="cancel_url"       value="https://stoptelemarketing.co.za">
-    <input type="hidden" name="notify_url"        id="notify_url"       value="https://stoptelemarketing.co.za/.netlify/functions/payfast-notify">
+    <input type="hidden" name="notify_url"        id="notify_url"       value="https://script.google.com/macros/s/AKfycbwORfij2K3QtbX5Ns7O2jYwkbrEQfm1RxlVDldTXzfdkRwfgiQvmUwLpirM_EUq_WQn6A/exec">
     <input type="hidden" name="name_first"        id="name_first">
     <input type="hidden" name="email_address"     id="email_address">
     <input type="hidden" name="cell_number"       id="cell_number">
@@ -1699,6 +1699,7 @@
         document.getElementById('name_first').value    = session.firstName;
         document.getElementById('email_address').value = session.email;
         document.getElementById('cell_number').value   = '';
+        document.getElementById('notify_url').value    = GOOGLE_SCRIPT_URL;
         document.getElementById('custom_str1').value   = orderRef;
         document.getElementById('custom_str2').value   = session.email;
         document.getElementById('custom_str3').value   = session.token;

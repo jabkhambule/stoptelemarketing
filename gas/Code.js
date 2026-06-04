@@ -1,5 +1,5 @@
 // ============================================================
-//  StopTelemarketing — Google Apps Script Backend v2.1
+//  StopTelemarketing — Google Apps Script Backend v2.2
 // ============================================================
 //  Run setup() once from the Apps Script editor to initialise
 //  sheets, Drive folder, and CRM email triggers.
@@ -12,11 +12,18 @@ var SUPPORT_EMAIL  = 'stoptelemaketing@gmail.com';
 var SESSION_TTL_MS = 7  * 24 * 60 * 60 * 1000;  // 7 days
 var VERIFY_TTL_MS  = 24 * 60 * 60 * 1000;         // 24 hours
 
+// PayFast merchant credentials (must match PayFast account settings)
+var PF_MERCHANT_ID  = '31907641';
+var PF_PASSPHRASE   = '';          // Set if you've added a passphrase in your PayFast account
+var PF_VALIDATE_URL = 'https://www.payfast.co.za/eng/query/validate';
+// var PF_VALIDATE_URL = 'https://sandbox.payfast.co.za/eng/query/validate'; // sandbox
+
 // Sheet names
 var SHEET_ACCOUNTS    = 'Accounts';
 var SHEET_SESSIONS    = 'Sessions';
 var SHEET_SUBMISSIONS = 'Submissions';
 var SHEET_CRM_LOG     = 'CRM_Log';
+var SHEET_PAYMENTS    = 'Payments';
 
 // Column indices (0-based)
 var AC  = { EMAIL:0, PW_HASH:1, FIRST:2, LAST:3, VERIFIED:4, VFY_TOKEN:5, VFY_EXPIRY:6, CREATED:7, VERIFIED_AT:8 };
@@ -25,6 +32,7 @@ var SUB = { ORDER_REF:0, TIMESTAMP:1, EMAIL:2, FIRST:3, SURNAME:4, ID_TYPE:5,
             ID_NUM:6, GENDER:7, MARITAL:8, PHONE:9, WORK_PHONE:10,
             ADDRESS:11, DOC_URL:12, STATUS:13, SESSION_TOKEN:14 };
 var CL  = { EMAIL:0, STAGE:1, SENT_AT:2 };
+var PY  = { ORDER_REF:0, EMAIL:1, AMOUNT:2, PF_PAYMENT_ID:3, STATUS:4, RECEIVED_AT:5, RAW:6 };
 
 // CRM follow-up schedule (milliseconds after the reference timestamp)
 var CRM_SCHEDULE = {
@@ -98,6 +106,9 @@ function initSheets() {
   ensureSheet(SHEET_CRM_LOG, [
     'Email','Stage','SentAt'
   ]);
+  ensureSheet(SHEET_PAYMENTS, [
+    'OrderRef','Email','AmountGross','PfPaymentId','Status','ReceivedAt','RawData'
+  ]);
 
   Logger.log('Sheets initialised.');
 }
@@ -144,6 +155,17 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  // PayFast ITN arrives as application/x-www-form-urlencoded with a payment_status field
+  if (e.parameter && e.parameter.payment_status) {
+    try {
+      return jsonOut(handlePayfastItn(e.parameter));
+    } catch (err) {
+      Logger.log('doPost ITN error: ' + err.message + '\n' + err.stack);
+      return jsonOut({ error: 'ITN processing error.' });
+    }
+  }
+
+  // Regular JSON submission (details + ID doc)
   var params = {};
   try {
     if (e.postData && e.postData.contents) {
@@ -359,6 +381,11 @@ function handleSubmitDetails(p) {
     docUrl = 'NO_FOLDER_RUN_SETUP';
   }
 
+  // Check if ITN has already confirmed payment for this orderRef
+  var paymentConfirmed = isPaymentConfirmed(orderRef);
+  // Also accept front-end signal (only trusted because session is validated)
+  var submissionStatus = paymentConfirmed ? 'active' : 'pending_payment';
+
   getSheet(SHEET_SUBMISSIONS).appendRow([
     orderRef,
     p.timestamp || new Date().toISOString(),
@@ -373,12 +400,12 @@ function handleSubmitDetails(p) {
     p.workPhone     || '',
     p.address       || '',
     docUrl,
-    'pending_payment',
+    submissionStatus,
     sessionToken
   ]);
 
-  Logger.log('Submission saved: ' + orderRef + ' for ' + email);
-  return { result: 'success', orderRef: orderRef };
+  Logger.log('Submission saved: ' + orderRef + ' [' + submissionStatus + '] for ' + email);
+  return { result: 'success', orderRef: orderRef, status: submissionStatus };
 }
 
 // ============================================================
@@ -461,6 +488,152 @@ function sendWelcomeEmail(email, firstName) {
 }
 
 // ============================================================
+//  PAYFAST ITN HANDLER
+// ============================================================
+//  PayFast POSTs to this endpoint after every payment event.
+//  We validate the signature, back-ping PayFast to confirm,
+//  log the result, then mark the matching Submission active.
+// ============================================================
+
+function handlePayfastItn(p) {
+  var orderRef     = (p.custom_str1 || '').trim();
+  var email        = normaliseEmail(p.custom_str2 || p.email_address || '');
+  var paymentId    = (p.pf_payment_id || p.m_payment_id || '').toString().trim();
+  var amountGross  = (p.amount_gross  || '0').toString().trim();
+  var status       = (p.payment_status || '').trim();
+  var receivedAt   = new Date().toISOString();
+
+  Logger.log('ITN received: orderRef=' + orderRef + ' status=' + status + ' pf_id=' + paymentId);
+
+  // 1. Signature validation
+  if (!validatePayfastSignature(p)) {
+    Logger.log('ITN REJECTED: invalid signature');
+    return { error: 'Invalid signature' };
+  }
+
+  // 2. Back-ping PayFast to confirm this ITN is genuine
+  if (!validateWithPayfast(p)) {
+    Logger.log('ITN REJECTED: PayFast back-validation failed');
+    return { error: 'PayFast validation failed' };
+  }
+
+  // 3. Verify our merchant ID
+  if (p.merchant_id !== PF_MERCHANT_ID) {
+    Logger.log('ITN REJECTED: merchant_id mismatch (' + p.merchant_id + ')');
+    return { error: 'Merchant ID mismatch' };
+  }
+
+  // 4. Log the payment (regardless of status)
+  getSheet(SHEET_PAYMENTS).appendRow([
+    orderRef, email, amountGross, paymentId, status, receivedAt,
+    JSON.stringify(p).substring(0, 500)   // truncate to avoid cell size limits
+  ]);
+
+  // 5. If payment complete, activate the matching submission (if it exists already)
+  if (status === 'COMPLETE') {
+    var activated = activateSubmission(orderRef);
+    Logger.log('ITN COMPLETE: orderRef=' + orderRef + ' activated=' + activated);
+  }
+
+  return { result: 'ok', orderRef: orderRef, status: status };
+}
+
+// ── Validate the PayFast MD5 signature ──────────────────────
+function validatePayfastSignature(p) {
+  try {
+    // Collect all params except signature, sort alphabetically
+    var keys = Object.keys(p).filter(function(k){ return k !== 'signature'; }).sort();
+    var parts = keys.map(function(k) {
+      return k + '=' + pfUrlEncode(p[k]);
+    });
+    var str = parts.join('&');
+    if (PF_PASSPHRASE) str += '&passphrase=' + pfUrlEncode(PF_PASSPHRASE);
+
+    // MD5 hash
+    var hashBytes = Utilities.computeDigest(
+      Utilities.DigestAlgorithm.MD5, str, Utilities.Charset.UTF_8
+    );
+    var hexHash = hashBytes.map(function(b){
+      var h = (b & 0xFF).toString(16);
+      return h.length === 1 ? '0' + h : h;
+    }).join('');
+
+    Logger.log('ITN sig computed=' + hexHash + ' received=' + p.signature);
+    return hexHash === p.signature;
+  } catch(e) {
+    Logger.log('Signature validation error: ' + e.message);
+    return false;
+  }
+}
+
+// URL-encode like PHP urlencode (spaces → +, special chars → %XX)
+function pfUrlEncode(val) {
+  return encodeURIComponent(String(val || ''))
+    .replace(/%20/g, '+')
+    .replace(/!/g, '%21')
+    .replace(/'/g, '%27')
+    .replace(/\(/g, '%28')
+    .replace(/\)/g, '%29')
+    .replace(/\*/g, '%2A');
+}
+
+// ── Back-ping PayFast to confirm the ITN is genuine ─────────
+function validateWithPayfast(p) {
+  try {
+    var keys  = Object.keys(p).sort();
+    var parts = keys.map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(p[k]); });
+    var body  = parts.join('&');
+
+    var response = UrlFetchApp.fetch(PF_VALIDATE_URL, {
+      method:            'POST',
+      payload:           body,
+      contentType:       'application/x-www-form-urlencoded',
+      muteHttpExceptions: true,
+      headers:           { 'User-Agent': 'StopTelemarketing-GAS/2.2' }
+    });
+    var text = response.getContentText().trim();
+    Logger.log('PayFast back-validation response: ' + text);
+    return text === 'VALID';
+  } catch(e) {
+    Logger.log('PayFast back-validation fetch error: ' + e.message);
+    return false;   // Fail safe: reject if we can't reach PayFast
+  }
+}
+
+// ── Update a Submissions row from pending_payment → active ──
+function activateSubmission(orderRef) {
+  if (!orderRef) return false;
+  var sheet = getSheet(SHEET_SUBMISSIONS);
+  var rows  = sheet.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (rows[i][SUB.ORDER_REF] === orderRef) {
+      sheet.getRange(i + 1, SUB.STATUS + 1).setValue('active');
+      Logger.log('Submission activated: row ' + (i + 1));
+      return true;
+    }
+  }
+  Logger.log('activateSubmission: no submission found for ' + orderRef);
+  return false;  // ITN arrived before form submission — Payments sheet log covers this
+}
+
+// ── Check if a payment is already confirmed (for submitDetails) ──
+function isPaymentConfirmed(orderRef) {
+  if (!orderRef) return false;
+  try {
+    var sheet = getSheet(SHEET_PAYMENTS);
+    var rows  = sheet.getDataRange().getValues();
+    for (var i = 1; i < rows.length; i++) {
+      if (rows[i][PY.ORDER_REF] === orderRef && rows[i][PY.STATUS] === 'COMPLETE') {
+        return true;
+      }
+    }
+  } catch(e) {
+    Logger.log('isPaymentConfirmed error: ' + e.message);
+  }
+  return false;
+}
+
+// ============================================================
 //  CRM — TIME-TRIGGERED FOLLOW-UP EMAILS
 // ============================================================
 //  runCrmFollowUps() is called daily by the time trigger.
@@ -532,7 +705,7 @@ function runCrmFollowUps() {
         }
       }
 
-      if (isPending && subTime) {
+      if (isPending && subTime && subRows[s2][SUB.STATUS] !== 'active') {
         var subAgeMs = now - subTime;
 
         if (subAgeMs >= CRM_SCHEDULE.payment_d3 && !hasSent(sentLog, email, 'payment_d3')) {
@@ -649,4 +822,4 @@ function getSheet(name) {
 function normaliseEmail(email) { return (email || '').trim().toLowerCase(); }
 function isValidEmail(email)   { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
 
-// v2.1 — CRM follow-up emails added Thu May 21 SAST 2026
+// v2.2 — PayFast ITN webhook handler added
