@@ -409,6 +409,15 @@ function handleSubmitDetails(p) {
   ]);
 
   Logger.log('Submission saved: ' + orderRef + ' [' + submissionStatus + '] for ' + email);
+
+  // Send confirmation email (best-effort — don't let email failure block the response)
+  try {
+    var firstName = p.firstName || '';
+    sendRegistrationConfirmEmail(email, firstName, orderRef);
+  } catch(emailErr) {
+    Logger.log('Confirmation email error: ' + emailErr.message);
+  }
+
   return { result: 'success', orderRef: orderRef, status: submissionStatus };
 }
 
@@ -814,6 +823,73 @@ function sendCrmEmail(email, firstName, stage) {
   Logger.log('CRM email sent [' + stage + '] → ' + email);
 }
 
+function sendRegistrationConfirmEmail(email, firstName, orderRef) {
+  var subject = 'You\'re on the Registry — StopTelemarketing confirmation';
+
+  var htmlBody =
+    '<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;">' +
+    '<div style="text-align:center;margin-bottom:28px;">' +
+    '<div style="width:80px;height:80px;background:#dcfce7;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;">' +
+    '<span style="font-size:40px;color:#16a34a;">&#10003;</span>' +
+    '</div>' +
+    '<h2 style="font-size:24px;font-weight:900;color:#0f172a;margin-bottom:6px;">You\'re on the Registry.</h2>' +
+    '<p style="font-size:15px;color:#475569;">Hi ' + firstName + ', your opt-out registration has been received.</p>' +
+    '</div>' +
+
+    '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px;margin-bottom:24px;">' +
+    '<div style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;">Order Reference</div>' +
+    '<div style="font-size:18px;font-weight:800;color:#0f172a;font-family:monospace;">' + orderRef + '</div>' +
+    '</div>' +
+
+    '<p style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:16px;">What happens next:</p>' +
+    '<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">' +
+
+    '<div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">' +
+    '<div style="width:28px;height:28px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800;font-size:12px;color:#16a34a;">1</div>' +
+    '<div><div style="font-size:13px;font-weight:700;color:#0f172a;">Within 1–2 business days</div>' +
+    '<div style="font-size:13px;color:#475569;margin-top:2px;">We submit your details to the National Do Not Call Registry on your behalf.</div></div>' +
+    '</div>' +
+
+    '<div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">' +
+    '<div style="width:28px;height:28px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800;font-size:12px;color:#16a34a;">2</div>' +
+    '<div><div style="font-size:13px;font-weight:700;color:#0f172a;">Within 4–6 weeks</div>' +
+    '<div style="font-size:13px;color:#475569;margin-top:2px;">Telemarketing calls reduce significantly. Companies are legally required to remove you from their lists.</div></div>' +
+    '</div>' +
+
+    '<div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;">' +
+    '<div style="width:28px;height:28px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800;font-size:12px;color:#16a34a;">3</div>' +
+    '<div><div style="font-size:13px;font-weight:700;color:#166534;">Your ID is permanently deleted within 30 days</div>' +
+    '<div style="font-size:13px;color:#166534;margin-top:2px;">Once your registration is confirmed, your ID document is automatically deleted from our servers. You can request written confirmation of deletion by replying to this email.</div></div>' +
+    '</div>' +
+
+    '</div>' +
+
+    '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-bottom:24px;font-size:13px;color:#1e40af;line-height:1.65;">' +
+    '<strong>Still getting calls after 6 weeks?</strong> Reply to this email with your order reference <strong>' + orderRef + '</strong> and we\'ll resubmit at no charge.' +
+    '</div>' +
+
+    '<hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;">' +
+    '<p style="font-size:12px;color:#94a3b8;text-align:center;">StopTelemarketing.co.za · ' + SUPPORT_EMAIL + '<br>' +
+    'We are not affiliated with the NCC. We act as your authorised representative for the opt-out process.</p>' +
+    '</div>';
+
+  MailApp.sendEmail({
+    to: email,
+    subject: subject,
+    name: FROM_NAME,
+    body: 'Hi ' + firstName + ',\n\nYour opt-out registration has been received.\n\nOrder Reference: ' + orderRef +
+      '\n\nWhat happens next:\n' +
+      '1. Within 1-2 business days: We submit your details to the NCC.\n' +
+      '2. Within 4-6 weeks: Calls reduce significantly.\n' +
+      '3. Within 30 days: Your ID document is permanently deleted.\n\n' +
+      'Still getting calls after 6 weeks? Reply with your order reference and we\'ll resubmit at no charge.\n\n' +
+      'StopTelemarketing.co.za',
+    htmlBody: htmlBody
+  });
+
+  Logger.log('Registration confirmation sent to ' + email + ' [' + orderRef + ']');
+}
+
 // ============================================================
 //  UTILITIES
 // ============================================================
@@ -827,4 +903,4 @@ function getSheet(name) {
 function normaliseEmail(email) { return (email || '').trim().toLowerCase(); }
 function isValidEmail(email)   { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
 
-// v2.2 — PayFast ITN webhook handler added
+// v2.3 — Confirmation email, field cleanup, trust copy
