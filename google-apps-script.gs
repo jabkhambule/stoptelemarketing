@@ -12,11 +12,14 @@ var SUPPORT_EMAIL  = 'stoptelemaketing@gmail.com';
 var SESSION_TTL_MS = 7  * 24 * 60 * 60 * 1000;  // 7 days
 var VERIFY_TTL_MS  = 24 * 60 * 60 * 1000;         // 24 hours
 
-// PayFast merchant credentials (must match PayFast account settings)
+// PayFast merchant credentials
 var PF_MERCHANT_ID  = '31907641';
-var PF_PASSPHRASE   = '';          // Set if you've added a passphrase in your PayFast account
 var PF_VALIDATE_URL = 'https://www.payfast.co.za/eng/query/validate';
 // var PF_VALIDATE_URL = 'https://sandbox.payfast.co.za/eng/query/validate'; // sandbox
+
+function getPfPassphrase() {
+  return PropertiesService.getScriptProperties().getProperty('PF_PASSPHRASE') || '';
+}
 
 // Sheet names
 var SHEET_ACCOUNTS    = 'Accounts';
@@ -55,6 +58,7 @@ function setup() {
   setupCrmTrigger();
   Logger.log('Setup complete!');
 }
+
 
 // Call this separately if you only need to install the CRM trigger
 function setupCrmTrigger() {
@@ -547,7 +551,8 @@ function validatePayfastSignature(p) {
       return k + '=' + pfUrlEncode(p[k]);
     });
     var str = parts.join('&');
-    if (PF_PASSPHRASE) str += '&passphrase=' + pfUrlEncode(PF_PASSPHRASE);
+    var passphrase = getPfPassphrase();
+    if (passphrase) str += '&passphrase=' + pfUrlEncode(passphrase);
 
     // MD5 hash
     var hashBytes = Utilities.computeDigest(
