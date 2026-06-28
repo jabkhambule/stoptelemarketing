@@ -44,9 +44,9 @@ In your Netlify dashboard → Site settings → Environment variables, add:
 
 | Variable | Value |
 |----------|-------|
-| `PAYFAST_MERCHANT_ID` | `31907641` |
-| `PAYFAST_MERCHANT_KEY` | `omutyofcmqnez` |
-| `PAYFAST_PASSPHRASE` | `2025WinnerJabu` |
+| `PAYFAST_MERCHANT_ID` | *(from PayFast dashboard — never commit)* |
+| `PAYFAST_MERCHANT_KEY` | *(from PayFast dashboard — never commit)* |
+| `PAYFAST_PASSPHRASE` | *(from PayFast dashboard — never commit)* |
 | `GOOGLE_SCRIPT_URL` | *(paste the Web App URL from Step 1)* |
 | `NOTIFY_EMAIL` | `stoptelemarketing@gmail.com` |
 | `NCC_TRIGGER_URL` | `https://stoptelemarketing.co.za/.netlify/functions/ncc-submit` |
@@ -58,7 +58,7 @@ In your Netlify dashboard → Site settings → Environment variables, add:
 In `index.html`, find the hidden PayFast form and remove the passphrase line:
 ```html
 <!-- DELETE this line: -->
-<input type="hidden" name="passphrase" id="passphrase" value="2025WinnerJabu">
+<input type="hidden" name="passphrase" id="passphrase" value="YOUR_PASSPHRASE">
 ```
 The passphrase is only needed server-side for signature verification — it should never be in your HTML.
 
