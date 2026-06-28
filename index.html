@@ -21,6 +21,20 @@
         })(window, document, "clarity", "script", "v0xb3qhrfv");
     </script>
 
+    <!-- ── GOOGLE ADS CONVERSION TRACKING ───────────────────────────
+         REQUIRED FOR PAID ADS. Two steps:
+         1) Replace AW-CONVERSION_ID below with your Google Ads tag ID
+            (Google Ads → Goals → Conversions → new "Purchase" action →
+            "Use Google tag" → copy the AW-XXXXXXXXXX id).
+         2) Replace AW-CONVERSION_ID/LABEL in the purchase event further
+            down (search "send_to") with your conversion ID + label.
+         (Your GA4 tag G-HTC13XNNL3 is already loaded above — you can ALSO
+         mark the "purchase" event as a Key Event in GA4 and import it into
+         Google Ads as a conversion, which needs no extra code.)
+    ──────────────────────────────────────────────────────────────── -->
+    <script>gtag('config', 'AW-CONVERSION_ID');</script>
+    <!-- ── END GOOGLE ADS ── -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -693,7 +707,7 @@
         </a>
         <ul class="nav-links">
             <li><a href="#how">How It Works</a></li>
-            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="#testimonials">Our Promise</a></li>
             <li><a href="#faq">FAQ</a></li>
         </ul>
         <a href="#order" class="nav-cta">
@@ -714,7 +728,7 @@
             <div>
                 <div class="hero-kicker">
                     <span class="hero-kicker-dot"></span>
-                    Trusted by 12,400+ South Africans · Official NCC Opt-Out
+                    Official NCC Opt-Out · POPIA-Compliant · PayFast Secured
                 </div>
                 <h1>
                     Stop Unwanted<br>Telemarketing Calls
@@ -880,42 +894,45 @@
 <!-- ── TESTIMONIALS ── -->
 <section class="testimonials" id="testimonials">
     <div class="wrap">
-        <div class="section-label">What Our Clients Say</div>
-        <h2>Real People. Real Results.</h2>
+        <div class="section-label">Our Promise</div>
+        <h2>Done Properly, Or Your Money Back.</h2>
         <div class="section-divider"></div>
         <div class="testimonials-grid">
             <div class="testimonial-card">
                 <div class="testimonial-top">
-                    <img class="testimonial-avatar" src="assets/lerato-m.png" alt="Lerato M." width="56" height="56">
+                    <div class="hero-trust-icon" style="width:48px;height:48px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;color:var(--green);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    </div>
                     <div>
-                        <div class="testimonial-name">Lerato M.</div>
-                        <div class="testimonial-loc">Johannesburg · <span style="color:var(--text-soft);font-weight:400;">Feb 2026</span></div>
-                        <div class="testimonial-stars">★★★★★</div>
+                        <div class="testimonial-name">The Official Process</div>
+                        <div class="testimonial-loc">NCC Do-Not-Call Registry</div>
                     </div>
                 </div>
-                <p class="testimonial-text">"The calls dropped dramatically within 2 weeks. Best R199 I've spent. I used to get 5 or 6 calls a day — now almost nothing."</p>
+                <p class="testimonial-text">We submit your opt-out through the government's official NCC system on your behalf — the same registry telemarketers are legally required to honour. No shortcuts, no third parties.</p>
             </div>
             <div class="testimonial-card">
                 <div class="testimonial-top">
-                    <img class="testimonial-avatar" src="assets/sipho-n.png" alt="Sipho N." width="56" height="56">
+                    <div class="hero-trust-icon" style="width:48px;height:48px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;color:var(--green);"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    </div>
                     <div>
-                        <div class="testimonial-name">Sipho N.</div>
-                        <div class="testimonial-loc">Durban · <span style="color:var(--text-soft);font-weight:400;">Jan 2026</span></div>
-                        <div class="testimonial-stars">★★★★★</div>
+                        <div class="testimonial-name">Your Data, Protected</div>
+                        <div class="testimonial-loc">POPIA-compliant · PayFast secured</div>
                     </div>
                 </div>
-                <p class="testimonial-text">"No more insurance and loan calls. Finally some peace and quiet. The process was so easy — done in under 3 minutes."</p>
+                <p class="testimonial-text">Your ID and details are encrypted, never sold or shared, and your ID document is permanently deleted within 30 days of registration. Payments are processed securely by PayFast.</p>
             </div>
             <div class="testimonial-card">
                 <div class="testimonial-top">
-                    <img class="testimonial-avatar" src="assets/michelle-d.png" alt="Michelle D." width="56" height="56">
+                    <div class="hero-trust-icon" style="width:48px;height:48px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;color:var(--green);"><path d="M21 12a9 9 0 11-6.219-8.56"/><path d="M22 4L12 14.01l-3-3"/></svg>
+                    </div>
                     <div>
-                        <div class="testimonial-name">Michelle D.</div>
-                        <div class="testimonial-loc">Cape Town · <span style="color:var(--text-soft);font-weight:400;">Mar 2026</span></div>
-                        <div class="testimonial-stars">★★★★★</div>
+                        <div class="testimonial-name">Our Guarantee</div>
+                        <div class="testimonial-loc">We stand behind the work</div>
                     </div>
                 </div>
-                <p class="testimonial-text">"Within 5 weeks the calls stopped almost completely. My whole family has now signed up. Professional, efficient and absolutely worth it."</p>
+                <p class="testimonial-text">Still getting telemarketing calls 6 weeks after registration? We file the official NCC complaint on your behalf at no extra charge. If we can't register you at all, you get a full refund.</p>
             </div>
         </div>
     </div>
@@ -1214,7 +1231,7 @@
                             <svg style="flex-shrink:0;margin-top:2px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
                             <div>
                                 <div style="font-size:13px;font-weight:700;color:var(--green-xdark);margin-bottom:2px;">Your ID is deleted within 30 days of submission</div>
-                                <div style="font-size:12px;color:var(--green-xdark);line-height:1.6;">We store it only as long as needed to complete your registration. After that it is permanently deleted from our servers — you can request confirmation of deletion at any time by emailing <strong>stoptelemaketing@gmail.com</strong></div>
+                                <div style="font-size:12px;color:var(--green-xdark);line-height:1.6;">We store it only as long as needed to complete your registration. After that it is permanently deleted from our servers — you can request confirmation of deletion at any time by emailing <strong>stoptelemarketing@gmail.com</strong></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -1280,7 +1297,7 @@
                             </div>
                         </div>
                         <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius-sm);padding:14px 16px;font-size:13px;color:#1e40af;line-height:1.65;">
-                            <strong>Still getting calls after 6 weeks?</strong> Email <strong>stoptelemaketing@gmail.com</strong> with your order reference — we'll file the official NCC complaint on your behalf at no charge.
+                            <strong>Still getting calls after 6 weeks?</strong> Email <strong>stoptelemarketing@gmail.com</strong> with your order reference — we'll file the official NCC complaint on your behalf at no charge.
                         </div>
                     </div>
                 </div>
@@ -1337,7 +1354,7 @@
                 <div class="footer-col-links">
                     <a href="#order">Get Started</a>
                     <a href="#how">How It Works</a>
-                    <a href="#testimonials">Reviews</a>
+                    <a href="#testimonials">Our Promise</a>
                     <a href="#faq">FAQ</a>
                 </div>
             </div>
@@ -1634,6 +1651,14 @@
         var session = getSession();
 
         if (payment === 'success') {
+            // ── Fire conversion events: a buyer just returned from PayFast ──
+            try {
+                if (window.gtag) {
+                    gtag('event', 'purchase', { value: 199.00, currency: 'ZAR' });
+                    // Google Ads conversion — replace AW-CONVERSION_ID/LABEL with your real values
+                    gtag('event', 'conversion', { send_to: 'AW-CONVERSION_ID/LABEL', value: 199.00, currency: 'ZAR', transaction_id: localStorage.getItem('st_pending_order') || '' });
+                }
+            } catch (e) {}
             // Returning from PayFast — clean URL and show details form
             window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
             if (session && session.token && session.verified) {
@@ -1719,6 +1744,10 @@
         if (!session || !session.token) { showProtAlert('Please sign in first.', 'error'); return; }
         var orderRef = 'OPT' + Date.now();
         localStorage.setItem('st_pending_order', orderRef);
+
+        try {
+            if (window.gtag) gtag('event', 'begin_checkout', { value: 199.00, currency: 'ZAR' });
+        } catch (e) {}
 
         document.getElementById('name_first').value    = session.firstName;
         document.getElementById('email_address').value = session.email;
